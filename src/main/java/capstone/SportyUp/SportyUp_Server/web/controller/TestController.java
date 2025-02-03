@@ -13,7 +13,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/test")
 public class TestController {
-    private static final String UPLOAD_DIR = "D:\\25-1\\CapstoneDesign\\project\\SportyUp-Server\\src\\main\\resources\\cam\\"; // 업로드된 파일 저장 폴더
+    private static final String UPLOAD_DIR = "C:\\Users\\EliteBook\\Documents\\GitHub\\Back\\src\\main\\resources\\cam\\"; // 업로드된 파일 저장 폴더
 
     @PostMapping("/message")
     public ResponseEntity<String> messageTest(@RequestParam String request){
