@@ -5,8 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.io.File;
+import org.springframework.web.multipart.MultipartFile;
 
 public class BowlingRequestDTO {
 
@@ -17,6 +16,7 @@ public class BowlingRequestDTO {
     public static class BowlingAnalyzeRequestDTO{
 
         @NotNull
-        File file;
+        MultipartFile file;
+
     }
 }

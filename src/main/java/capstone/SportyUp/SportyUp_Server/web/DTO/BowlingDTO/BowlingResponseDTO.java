@@ -1,11 +1,10 @@
 package capstone.SportyUp.SportyUp_Server.web.DTO.BowlingDTO;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.io.File;
 
 public class BowlingResponseDTO {
 
@@ -14,7 +13,12 @@ public class BowlingResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class BowlingAnalyzeResponseDTO{
-        File file;
+
+        @NotNull
+        String videoUrl;
+
+        @NotNull
         Integer score;
+
     }
 }
