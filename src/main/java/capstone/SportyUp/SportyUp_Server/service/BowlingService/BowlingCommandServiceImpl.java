@@ -24,7 +24,7 @@ import java.nio.file.Files;
 public class BowlingCommandServiceImpl implements BowlingCommandService {
 
     private final String FLASK_SERVER_URL = "http://127.0.0.1:5000";  // Flask 서버 URL (예시: http://localhost:5000)
-    private static final String UPLOAD_DIR = "D:\\25-1\\CapstoneDesign\\project\\SportyUp-Server\\src\\main\\resources\\cam\\"; // 업로드된 파일 저장 폴더
+    private static final String UPLOAD_DIR = "C:\\Users\\EliteBook\\Documents\\GitHub\\Back\\src\\main\\resources\\cam\\"; // 업로드된 파일 저장 폴더
     private static final String UPLOAD_RESULT_DIR = "C:\\Users\\EliteBook\\Documents\\GitHub\\Back\\src\\main\\resources\\cam_after_flask\\";
 
     private BowlingConverter bowlingConverter;
