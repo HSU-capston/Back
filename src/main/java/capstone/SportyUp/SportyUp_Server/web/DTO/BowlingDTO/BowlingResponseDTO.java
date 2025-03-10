@@ -17,8 +17,5 @@ public class BowlingResponseDTO {
         @NotNull
         String videoUrl;
 
-        @NotNull
-        Integer score;
-
     }
 }

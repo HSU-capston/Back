@@ -1,5 +1,6 @@
 package capstone.SportyUp.SportyUp_Server.service.BowlingService;
 
+import capstone.SportyUp.SportyUp_Server.converter.BowlingConverter;
 import capstone.SportyUp.SportyUp_Server.web.DTO.BowlingDTO.BowlingRequestDTO;
 import capstone.SportyUp.SportyUp_Server.web.DTO.BowlingDTO.BowlingResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +26,8 @@ public class BowlingCommandServiceImpl implements BowlingCommandService {
     private final String FLASK_SERVER_URL = "http://127.0.0.1:5000";  // Flask 서버 URL (예시: http://localhost:5000)
     private static final String UPLOAD_DIR = "D:\\25-1\\CapstoneDesign\\project\\SportyUp-Server\\src\\main\\resources\\cam\\"; // 업로드된 파일 저장 폴더
     private static final String UPLOAD_RESULT_DIR = "C:\\Users\\EliteBook\\Documents\\GitHub\\Back\\src\\main\\resources\\cam_after_flask\\";
+
+    private BowlingConverter bowlingConverter;
 
     @Override
     public BowlingResponseDTO.BowlingAnalyzeResponseDTO analyzeBowling(BowlingRequestDTO.BowlingAnalyzeRequestDTO request) {
@@ -47,10 +51,12 @@ public class BowlingCommandServiceImpl implements BowlingCommandService {
             File destination = new File(UPLOAD_DIR + bowlingVideo.getOriginalFilename());
             bowlingVideo.transferTo(destination);
 
-            // Flask 서버로 파일 전송
-            sendFileToFlask(destination);
+            // Flask 서버로 파일 전송 및 처리된 파일 받기
+            File processedFile = sendFileToFlask(destination);
+            String fileUrl = getProcessedFileUrl(processedFile.getName());
+
             //Todo: 파일 저장 성공
-            return null;
+            return BowlingConverter.toBowlingAnalyzeResponseDTO(fileUrl);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -59,7 +65,11 @@ public class BowlingCommandServiceImpl implements BowlingCommandService {
         }
     }
 
-    private void sendFileToFlask(File file) throws IOException {
+    private String getProcessedFileUrl(String fileName) {
+        return "http://localhost:8080/processed-files/" + fileName;
+    }
+
+    private File sendFileToFlask(File file) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
 
         // Flask 서버에 보낼 파일 설정
@@ -76,12 +86,18 @@ public class BowlingCommandServiceImpl implements BowlingCommandService {
         try {
             // Flask 서버의 /upload 엔드포인트로 파일 업로드 요청
             URI uri = URI.create(FLASK_SERVER_URL + "/upload");
-            ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.POST, entity, String.class);
+            ResponseEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.POST, entity, byte[].class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
-                System.out.println("Flask 서버로 파일 전송 성공");
+                // Flask 서버에서 처리된 파일을 저장할 경로 지정
+                File processedFile = new File(UPLOAD_RESULT_DIR + file.getName());
+                // 응답으로 받은 바이트 배열을 처리된 파일로 저장
+                Files.write(processedFile.toPath(), response.getBody());
+                System.out.println("Flask 서버로 파일 전송 및 처리 성공");
+                return processedFile;
             } else {
                 System.out.println("Flask 서버로 파일 전송 실패: " + response.getStatusCode());
+                throw new IOException("Flask 서버에서 처리된 파일을 받는 데 실패했습니다.");
             }
         } catch (Exception e) {
             e.printStackTrace();
