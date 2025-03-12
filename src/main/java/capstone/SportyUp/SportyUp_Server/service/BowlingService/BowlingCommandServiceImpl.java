@@ -54,6 +54,7 @@ public class BowlingCommandServiceImpl implements BowlingCommandService {
             // Flask 서버로 파일 전송 및 처리된 파일 받기
             File processedFile = sendFileToFlask(destination);
             String fileUrl = getProcessedFileUrl(processedFile.getName());
+            System.out.println("Processed Url : " + fileUrl);
 
             //Todo: 파일 저장 성공
             return BowlingConverter.toBowlingAnalyzeResponseDTO(fileUrl);

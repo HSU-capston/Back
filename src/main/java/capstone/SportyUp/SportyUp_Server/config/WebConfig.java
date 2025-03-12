@@ -10,5 +10,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/processed-files/**")
                 .addResourceLocations("file:C:/Users/EliteBook/Documents/GitHub/Back/src/main/resources/cam_after_flask/");
+//        registry.addResourceHandler("/Test/**") 바탕화면에서 테스트
+//                .addResourceLocations("file:C:/Users/EliteBook/Desktop/");
     }
 }
