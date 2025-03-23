@@ -1,0 +1,30 @@
+package capstone.SportyUp.SportyUp_Server.web.controller;
+
+import capstone.SportyUp.SportyUp_Server.apiPayload.ApiResponse;
+import capstone.SportyUp.SportyUp_Server.web.DTO.AnalyzeDTO.AnalyzeRequestDTO;
+import capstone.SportyUp.SportyUp_Server.web.DTO.AnalyzeDTO.AnalyzeResponseDTO;
+import capstone.SportyUp.SportyUp_Server.web.controller.specification.AnalyzeSpecification;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/analyzes")
+public class AnalyzeController implements AnalyzeSpecification {
+
+    @Override
+    public ApiResponse<AnalyzeResponseDTO.ChartDTO> getChart() {
+        return null;
+    }
+
+    @Override
+    public ApiResponse<AnalyzeResponseDTO.BowlingDTO> getBowlingAnalyze(Long analyzeId) {
+        return null;
+    }
+
+    @Override
+    public ApiResponse<AnalyzeResponseDTO.BowlingResultDTO> requestAnalyzeBowling(Long gameId, AnalyzeRequestDTO.BowlingDTO request) {
+        return null;
+    }
+}
