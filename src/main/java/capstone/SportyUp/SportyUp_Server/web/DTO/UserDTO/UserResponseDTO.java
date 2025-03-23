@@ -22,4 +22,14 @@ public class UserResponseDTO {
         @NotBlank
         private String phone_num;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class JoinResultDTO{
+        @NotBlank
+        private String id;
+
+    }
 }
