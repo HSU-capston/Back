@@ -33,7 +33,7 @@ public class User extends BaseEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserStatus status;
+    private UserStatus status = UserStatus.ACTIVE;  //default = ACTIVE
 
     private LocalDateTime inactiveDate;
 
