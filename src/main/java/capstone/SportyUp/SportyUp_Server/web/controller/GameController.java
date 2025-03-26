@@ -27,7 +27,7 @@ public class GameController implements GameSpecification {
     }
 
     @Override
-    public ApiResponse<GameResponseDTO.BowlingInfoDTO> getBowlingInfo(Long gameId) {
+    public ApiResponse<GameResponseDTO.GameDetailDTO> getBowlingInfo(Long gameId) {
         return null;
     }
 

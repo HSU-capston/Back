@@ -32,7 +32,7 @@ public interface GameSpecification {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "GAME4001", description = "존재하지 않는 게임입니다.")
     })
-    ApiResponse<GameResponseDTO.BowlingInfoDTO> getBowlingInfo(@PathVariable Long gameId);
+    ApiResponse<GameResponseDTO.GameDetailDTO> getBowlingInfo(@PathVariable Long gameId);
 
     @PostMapping("/manual")
     @Operation(summary = "게임 생성 API", description = "모바일 촬영으로 시작 시 게임 생성 API입니다.")
