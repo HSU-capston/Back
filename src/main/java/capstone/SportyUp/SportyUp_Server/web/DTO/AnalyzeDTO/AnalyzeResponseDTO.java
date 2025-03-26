@@ -45,8 +45,11 @@ public class AnalyzeResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class BowlingResultDTO{
+    public static class AnalyzeResultDTO{
         Long id;
+        String poseScore;
+        String recommendPose;
+        String videoUrl;
     }
 
 }
