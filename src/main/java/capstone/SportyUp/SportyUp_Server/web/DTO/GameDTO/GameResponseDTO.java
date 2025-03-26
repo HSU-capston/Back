@@ -41,7 +41,7 @@ public class GameResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class BowlingInfoDTO{
+    public static class GameDetailDTO{
         Long id;
         String playDate;
         String summary; //게임 요약

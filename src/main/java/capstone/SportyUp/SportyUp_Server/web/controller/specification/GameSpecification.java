@@ -12,27 +12,27 @@ import java.time.LocalDate;
 public interface GameSpecification {
 
     @GetMapping("")
-    @Operation(summary = "게임 리스트 조회 API", description = "한 날짜에 진행된 게임들의 리스트를 보여주는 API입니다. QueryString으로 date 필요")
+    @Operation(summary = "게임 리스트 조회 API", description = "한 날짜에 진행된 게임들의 리스트를 보여주는 API입니다. QueryString으로 date, sports 필요")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
-    ApiResponse<GameResponseDTO.GameInfoListDTO> getGameList(@RequestParam LocalDate date);
+    ApiResponse<GameResponseDTO.GameInfoListDTO> getGameList(@RequestParam LocalDate date, @RequestParam String sports);
 
     @GetMapping("/dates")
-    @Operation(summary = "캘린더 탭 조회 API", description = "달력에서 게임이 진행된 날짜를 표시하기 위한 API입니다. QueryString으로 year와 month 필요")
+    @Operation(summary = "캘린더 탭 조회 API", description = "달력에서 게임이 진행된 날짜를 표시하기 위한 API입니다. QueryString으로 year와 month, sports 필요")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "DATE4001", description = "날짜가 잘못되었습니다.")
     })
-    ApiResponse<GameResponseDTO.GameDateListDTO> getGameDateList(@RequestParam Integer year, @RequestParam Integer month);
+    ApiResponse<GameResponseDTO.GameDateListDTO> getGameDateList(@RequestParam Integer year, @RequestParam Integer month, @RequestParam String sports);
 
-    @GetMapping("/bowling/{gameId}")
-    @Operation(summary = "볼링 게임 조회 API", description = "볼링 종목으로 진행된 게임 하나를 조회하는 API입니다. PathVariable로 gameId 필요")
+    @GetMapping("/{gameId}}")
+    @Operation(summary = "게임 조회 API", description = "게임 하나를 조회하는 API입니다. PathVariable로 gameId 필요")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "GAME4001", description = "존재하지 않는 게임입니다.")
     })
-    ApiResponse<GameResponseDTO.BowlingInfoDTO> getBowlingInfo(@PathVariable Long gameId);
+    ApiResponse<GameResponseDTO.GameDetailDTO> getBowlingInfo(@PathVariable Long gameId);
 
     @PostMapping("/manual")
     @Operation(summary = "게임 생성 API", description = "모바일 촬영으로 시작 시 게임 생성 API입니다.")

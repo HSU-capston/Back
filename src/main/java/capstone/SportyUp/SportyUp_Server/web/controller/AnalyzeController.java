@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AnalyzeController implements AnalyzeSpecification {
 
     @Override
-    public ApiResponse<AnalyzeResponseDTO.ChartDTO> getChart() {
+    public ApiResponse<AnalyzeResponseDTO.ChartDTO> getChart(Long sportsId) {
         return null;
     }
 

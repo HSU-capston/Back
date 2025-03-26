@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 public interface AnalyzeSpecification {
-    @GetMapping("/chart")
+    @GetMapping("/chart/{sportsId}")
     @Operation(summary = "분석 페이지 차트 조회 API", description = "차트에 필요한 데이터를 조회하는 API입니다. 어떤 종목에 대한 차트인지 구분 필요")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
-    ApiResponse<AnalyzeResponseDTO.ChartDTO> getChart();
+    ApiResponse<AnalyzeResponseDTO.ChartDTO> getChart(@PathVariable Long sportsId);
 
     @GetMapping("/bowling/{analyzeId}")
     @Operation(summary = "볼링 상세 분석 조회 API", description = "볼링 게임에 대한 분석을 조회하는 API입니다. PathVariable로 analyzeId 필요")

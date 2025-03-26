@@ -17,17 +17,17 @@ import java.time.LocalDate;
 public class GameController implements GameSpecification {
 
     @Override
-    public ApiResponse<GameResponseDTO.GameInfoListDTO> getGameList(LocalDate date) {
+    public ApiResponse<GameResponseDTO.GameInfoListDTO> getGameList(LocalDate date, String sports) {
         return null;
     }
 
     @Override
-    public ApiResponse<GameResponseDTO.GameDateListDTO> getGameDateList(Integer year, Integer month) {
+    public ApiResponse<GameResponseDTO.GameDateListDTO> getGameDateList(Integer year, Integer month, String sports) {
         return null;
     }
 
     @Override
-    public ApiResponse<GameResponseDTO.BowlingInfoDTO> getBowlingInfo(Long gameId) {
+    public ApiResponse<GameResponseDTO.GameDetailDTO> getBowlingInfo(Long gameId) {
         return null;
     }
 
