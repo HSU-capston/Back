@@ -2,6 +2,7 @@ package capstone.SportyUp.SportyUp_Server.web.controller;
 
 
 import capstone.SportyUp.SportyUp_Server.apiPayload.ApiResponse;
+import capstone.SportyUp.SportyUp_Server.service.GameService.GameCommandService;
 import capstone.SportyUp.SportyUp_Server.web.DTO.GameDTO.GameRequestDTO;
 import capstone.SportyUp.SportyUp_Server.web.DTO.GameDTO.GameResponseDTO;
 import capstone.SportyUp.SportyUp_Server.web.controller.specification.GameSpecification;
@@ -15,6 +16,8 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 @RequestMapping("/games")
 public class GameController implements GameSpecification {
+
+    private final GameCommandService gameCommandService;
 
     @Override
     public ApiResponse<GameResponseDTO.GameInfoListDTO> getGameList(LocalDate date, String sports) {
@@ -32,8 +35,9 @@ public class GameController implements GameSpecification {
     }
 
     @Override
-    public ApiResponse<GameResponseDTO.CreateResultDTO> createGameInMobile(GameRequestDTO.CreateDTO request) {
-        return null;
+    public ApiResponse<GameResponseDTO.CreateResultDTO> createGameInMobile(Long userId, GameRequestDTO.CreateDTO request) {
+
+        return ApiResponse.onSuccess(gameCommandService.createGame(userId, request));
     }
 
     @Override

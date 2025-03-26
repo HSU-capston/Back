@@ -26,7 +26,7 @@ public interface GameSpecification {
     })
     ApiResponse<GameResponseDTO.GameDateListDTO> getGameDateList(@RequestParam Integer year, @RequestParam Integer month, @RequestParam String sports);
 
-    @GetMapping("/{gameId}}")
+    @GetMapping("/{gameId}")
     @Operation(summary = "게임 조회 API", description = "게임 하나를 조회하는 API입니다. PathVariable로 gameId 필요")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
@@ -35,11 +35,11 @@ public interface GameSpecification {
     ApiResponse<GameResponseDTO.GameDetailDTO> getBowlingInfo(@PathVariable Long gameId);
 
     @PostMapping("/manual")
-    @Operation(summary = "게임 생성 API", description = "모바일 촬영으로 시작 시 게임 생성 API입니다.")
+    @Operation(summary = "게임 생성 API", description = "모바일 촬영으로 시작 시 게임 생성 API입니다. ")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
-    ApiResponse<GameResponseDTO.CreateResultDTO> createGameInMobile(@RequestBody GameRequestDTO.CreateDTO request);
+    ApiResponse<GameResponseDTO.CreateResultDTO> createGameInMobile(@RequestParam Long userId, @RequestBody GameRequestDTO.CreateDTO request);
 
     @PatchMapping("")
     @Operation(summary = "게임 종료 API", description = "게임 종료 API입니다. 게임 종료 후 점수 입력 등등")

@@ -8,7 +8,7 @@ public class GameRequestDTO {
     @Getter
     @Setter
     public static class CreateDTO{
-        String sports;
+        Long sportsId;
     }
 
     @Getter
