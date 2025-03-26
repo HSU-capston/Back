@@ -13,7 +13,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BowlingAnalyze extends BaseEntity {
+public class AnalyzeEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -5,10 +5,7 @@ import capstone.SportyUp.SportyUp_Server.web.DTO.AnalyzeDTO.AnalyzeRequestDTO;
 import capstone.SportyUp.SportyUp_Server.web.DTO.AnalyzeDTO.AnalyzeResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 public interface AnalyzeSpecification {
     @GetMapping("/chart/{sportsId}")
@@ -25,10 +22,10 @@ public interface AnalyzeSpecification {
     })
     ApiResponse<AnalyzeResponseDTO.BowlingDTO> getBowlingAnalyze(@PathVariable Long analyzeId);
 
-    @PostMapping("/{gameId}")
-    @Operation(summary = "분석 요청 API", description = "볼링 영상 분석을 요청하는 API입니다. PathVariable로 gameId 필요, 요청할 동영상파일 필요")
+    @PostMapping(path = "/{gameId}", consumes = "multipart/form-data")
+    @Operation(summary = "분석 요청 API", description = "영상 분석을 요청하는 API입니다. PathVariable로 gameId 필요, 요청할 동영상파일 필요")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
-    ApiResponse<AnalyzeResponseDTO.BowlingResultDTO> requestAnalyzeBowling(@PathVariable Long gameId, @ModelAttribute AnalyzeRequestDTO.BowlingDTO request);
+    ApiResponse<AnalyzeResponseDTO.AnalyzeResultDTO> requestAnalyze(@RequestParam Long userId,@PathVariable Long gameId, @ModelAttribute AnalyzeRequestDTO.BowlingDTO request);
 }
