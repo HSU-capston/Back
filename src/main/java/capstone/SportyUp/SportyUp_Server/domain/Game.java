@@ -6,7 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Builder
@@ -21,7 +21,7 @@ public class Game extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDate playDate;
+    private LocalDateTime playDate;
 
     private String summary;
 
