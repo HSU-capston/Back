@@ -41,7 +41,9 @@ public class GameController implements GameSpecification {
     }
 
     @Override
-    public ApiResponse<GameResponseDTO.EndResultDTO> endGame(GameRequestDTO.EndDTO request) {
-        return null;
+    public ApiResponse<GameResponseDTO.EndResultDTO> endGame(Long gameId, GameRequestDTO.EndDTO request) {
+
+
+        return ApiResponse.onSuccess(gameCommandService.endGame(gameId, request));
     }
 }
