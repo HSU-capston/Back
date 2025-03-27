@@ -63,6 +63,9 @@ public class GameResponseDTO {
     @AllArgsConstructor
     public static class EndResultDTO{
         Long id;
+        String summary;
+        String highlightUrl;
+        Integer score;
     }
 
 }

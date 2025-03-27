@@ -38,4 +38,18 @@ public class GameCommandServiceImpl implements GameCommandService {
 
         return GameConverter.toCreateResultDTO(game.getId());
     }
+
+    @Override
+    public GameResponseDTO.EndResultDTO endGame(Long gameId, GameRequestDTO.EndDTO request) {
+
+        Game game = gameRepository.findById(gameId).orElse(null);
+
+        game.setScore(request.getScore());
+        game.setSummary("적당히 잘했어..");
+        game.setHighlightUrl("highlight_url");
+
+        gameRepository.save(game);
+
+        return GameConverter.toEndResultDTO(game);
+    }
 }

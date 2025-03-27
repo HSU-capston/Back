@@ -41,11 +41,11 @@ public interface GameSpecification {
     })
     ApiResponse<GameResponseDTO.CreateResultDTO> createGameInMobile(@RequestParam Long userId, @RequestBody GameRequestDTO.CreateDTO request);
 
-    @PatchMapping("")
-    @Operation(summary = "게임 종료 API", description = "게임 종료 API입니다. 게임 종료 후 점수 입력 등등")
+    @PatchMapping("/{gameId}")
+    @Operation(summary = "게임 종료 API", description = "게임 종료 API입니다. PathVariable로 gameId필요, 게임 종료 후 점수 입력 등등")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
-    ApiResponse<GameResponseDTO.EndResultDTO> endGame(@RequestBody GameRequestDTO.EndDTO request);
+    ApiResponse<GameResponseDTO.EndResultDTO> endGame(@PathVariable Long gameId, @RequestBody GameRequestDTO.EndDTO request);
 
 }
