@@ -13,7 +13,7 @@ public interface AnalyzeSpecification {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
-    ApiResponse<AnalyzeResponseDTO.ChartDTO> getChart(@PathVariable Long sportsId);
+    ApiResponse<AnalyzeResponseDTO.ChartDTO> getChart(@RequestParam Long userId, @PathVariable Long sportsId);
 
     @GetMapping("/bowling/{analyzeId}")
     @Operation(summary = "볼링 상세 분석 조회 API", description = "볼링 게임에 대한 분석을 조회하는 API입니다. PathVariable로 analyzeId 필요")
