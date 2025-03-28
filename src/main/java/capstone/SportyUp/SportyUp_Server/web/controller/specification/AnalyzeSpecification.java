@@ -8,12 +8,19 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.web.bind.annotation.*;
 
 public interface AnalyzeSpecification {
-    @GetMapping("/bowling/{analyzeId}")
-    @Operation(summary = "볼링 상세 분석 조회 API", description = "볼링 게임에 대한 분석을 조회하는 API입니다. PathVariable로 analyzeId 필요")
+    @GetMapping("/{analyzeId}")
+    @Operation(summary = "상세 분석 조회 API", description = "하나의 분석 내용을 조회하는 API입니다. PathVariable로 analyzeId 필요")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
-    ApiResponse<AnalyzeResponseDTO.BowlingDTO> getBowlingAnalyze(@PathVariable Long analyzeId);
+    ApiResponse<AnalyzeResponseDTO.BowlingDTO> getAnalyze(@PathVariable Long analyzeId);
+
+    @GetMapping("/{gameId}/list")
+    @Operation(summary = "상세 분석 리스트 조회 API", description = "한 게임의 분석들의 리스트를 조회하는 API입니다. PathVariable로 gameId 필요")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+    })
+    ApiResponse<AnalyzeResponseDTO.AnalyzeInfoListDTO> getAnalyzeList(@PathVariable Long gameId);
 
     @PostMapping(path = "/{gameId}", consumes = "multipart/form-data")
     @Operation(summary = "분석 요청 API", description = "영상 분석을 요청하는 API입니다. PathVariable로 gameId 필요, 요청할 동영상파일 필요")

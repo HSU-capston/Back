@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 public class AnalyzeResponseDTO {
 
     @Builder
@@ -26,6 +28,23 @@ public class AnalyzeResponseDTO {
         String poseScore;
         String recommendPose;
         String videoUrl;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AnalyzeInfoDTO{
+        Long id;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AnalyzeInfoListDTO{
+        Integer listSize;
+        List<AnalyzeInfoDTO> analyzeList;
     }
 
 }
