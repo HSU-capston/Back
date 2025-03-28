@@ -117,4 +117,12 @@ public class GameQueryServiceImpl implements GameQueryService {
 
         return GameConverter.toGameInfoListDTO(gameList);
     }
+
+    @Override
+    public GameResponseDTO.GameDetailDTO getGameDetail(Long gameId) {
+
+        Game game = gameRepository.findById(gameId).orElse(null);
+
+        return GameConverter.toGameDetailDTO(game);
+    }
 }

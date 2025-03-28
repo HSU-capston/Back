@@ -46,8 +46,9 @@ public class GameController implements GameSpecification {
     }
 
     @Override
-    public ApiResponse<GameResponseDTO.GameDetailDTO> getBowlingInfo(Long gameId) {
-        return null;
+    public ApiResponse<GameResponseDTO.GameDetailDTO> getGameDetail(Long gameId) {
+
+        return ApiResponse.onSuccess(gameQueryService.getGameDetail(gameId));
     }
 
     @Override
