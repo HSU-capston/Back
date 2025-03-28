@@ -18,8 +18,14 @@ public class AnalyzeController implements AnalyzeSpecification {
     private final AnalyzeQueryService analyzeQueryService;
 
     @Override
-    public ApiResponse<AnalyzeResponseDTO.BowlingDTO> getBowlingAnalyze(Long analyzeId) {
+    public ApiResponse<AnalyzeResponseDTO.BowlingDTO> getAnalyze(Long analyzeId) {
         return null;
+    }
+
+    @Override
+    public ApiResponse<AnalyzeResponseDTO.AnalyzeInfoListDTO> getAnalyzeList(Long gameId) {
+
+        return ApiResponse.onSuccess(analyzeQueryService.getAnalyzeList(gameId));
     }
 
     @Override
