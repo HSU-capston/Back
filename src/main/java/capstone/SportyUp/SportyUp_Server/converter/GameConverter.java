@@ -72,4 +72,15 @@ public class GameConverter {
                 .build();
 
     }
+
+    public static GameResponseDTO.GameDetailDTO toGameDetailDTO(Game game){
+
+        return GameResponseDTO.GameDetailDTO.builder()
+                .id(game.getId())
+                .summary(game.getSummary())
+                .score(game.getScore())
+                .playDate(game.getPlayDate())
+                .highlightUrl(game.getHighlightUrl())
+                .build();
+    }
 }

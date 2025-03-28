@@ -10,4 +10,5 @@ public interface GameQueryService {
     public GameResponseDTO.GameDateListDTO getGameDateListOneCategory(Long userId, Integer year, Integer month, Long sportsId);
     public GameResponseDTO.GameInfoListDTO getGameListAllCategory(Long userId, LocalDate date);
     public GameResponseDTO.GameInfoListDTO getGameListOneCategory(Long userId, LocalDate date, Long sportsId);
+    public GameResponseDTO.GameDetailDTO getGameDetail(Long gameId);
 }
