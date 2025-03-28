@@ -3,6 +3,7 @@ package capstone.SportyUp.SportyUp_Server.converter;
 import capstone.SportyUp.SportyUp_Server.domain.Game;
 import capstone.SportyUp.SportyUp_Server.web.DTO.GameDTO.GameResponseDTO;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,5 +43,16 @@ public class GameConverter {
             result.add(dto);
         }
         return result;
+    }
+
+    public static GameResponseDTO.GameDateListDTO toGameDateListDTO(List<Game> gameList){
+        List<LocalDate> dateList = new ArrayList<>();
+        for(Game game : gameList){
+            dateList.add(game.getPlayDate().toLocalDate());
+        }
+
+        return GameResponseDTO.GameDateListDTO.builder()
+                .gameDateList(dateList)
+                .build();
     }
 }

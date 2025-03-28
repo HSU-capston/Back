@@ -19,12 +19,21 @@ public interface GameSpecification {
     ApiResponse<GameResponseDTO.GameInfoListDTO> getGameList(@RequestParam LocalDate date, @RequestParam String sports);
 
     @GetMapping("/dates")
-    @Operation(summary = "캘린더 탭 조회 API", description = "달력에서 게임이 진행된 날짜를 표시하기 위한 API입니다. QueryString으로 year와 month, sports 필요")
+    @Operation(summary = "캘린더 탭 조회(전체종목) API", description = "달력에서 전체종목으로 게임이 진행된 날짜를 표시하기 위한 API입니다. QueryString으로 year와 month 필요")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "DATE4001", description = "날짜가 잘못되었습니다.")
     })
-    ApiResponse<GameResponseDTO.GameDateListDTO> getGameDateList(@RequestParam Integer year, @RequestParam Integer month, @RequestParam String sports);
+    ApiResponse<GameResponseDTO.GameDateListDTO> getGameDateListAllCategory(@RequestParam Long userId, @RequestParam Integer year, @RequestParam Integer month);
+
+    @GetMapping("/dates/{sportsId}")
+    @Operation(summary = "캘린더 탭 조회(한 개 종목) API", description = "달력에서 한 종목으로 게임이 진행된 날짜를 표시하기 위한 API입니다. QueryString으로 year와 month 필요")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "DATE4001", description = "날짜가 잘못되었습니다.")
+    })
+    ApiResponse<GameResponseDTO.GameDateListDTO> getGameDateListOneCategory(@RequestParam Long userId, @RequestParam Integer year, @RequestParam Integer month, @PathVariable Long sportsId);
+
 
     @GetMapping("/{gameId}")
     @Operation(summary = "게임 조회 API", description = "게임 하나를 조회하는 API입니다. PathVariable로 gameId 필요")
