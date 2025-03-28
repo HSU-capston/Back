@@ -2,6 +2,7 @@ package capstone.SportyUp.SportyUp_Server.web.controller;
 
 import capstone.SportyUp.SportyUp_Server.apiPayload.ApiResponse;
 import capstone.SportyUp.SportyUp_Server.service.AnalyzeService.AnalyzeCommandService;
+import capstone.SportyUp.SportyUp_Server.service.AnalyzeService.AnalyzeQueryService;
 import capstone.SportyUp.SportyUp_Server.web.DTO.AnalyzeDTO.AnalyzeRequestDTO;
 import capstone.SportyUp.SportyUp_Server.web.DTO.AnalyzeDTO.AnalyzeResponseDTO;
 import capstone.SportyUp.SportyUp_Server.web.controller.specification.AnalyzeSpecification;
@@ -14,11 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/analyzes")
 public class AnalyzeController implements AnalyzeSpecification {
     private final AnalyzeCommandService analyzeCommandService;
-
-    @Override
-    public ApiResponse<AnalyzeResponseDTO.ChartDTO> getChart(Long sportsId) {
-        return null;
-    }
+    private final AnalyzeQueryService analyzeQueryService;
 
     @Override
     public ApiResponse<AnalyzeResponseDTO.BowlingDTO> getBowlingAnalyze(Long analyzeId) {
