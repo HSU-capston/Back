@@ -19,8 +19,9 @@ public class GameQueryServiceImpl implements GameQueryService {
     @Override
     public GameResponseDTO.ChartDTO getChart(Long userId, Long sportsId) {
 
-        User user = userRepository.findById(userId).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);   //Todo: 유저 확인
         List<Game> gameList = gameRepository.findByUserIdAndSportsId(userId,sportsId);
+        List<Game> currentGameList = gameRepository.findTop6ByUserIdAndSportsIdOrderByPlayDateDesc(userId, sportsId);
 
         if (gameList.isEmpty()) {
             // 게임이 없는 경우, 0 또는 null로 처리
@@ -45,8 +46,6 @@ public class GameQueryServiceImpl implements GameQueryService {
 
         long gameCount = gameList.size();
 
-        //Todo: 날짜별 점수 리스트 로직
-
-        return GameConverter.toChartDTO(gameCount, averageScore, highScore, lowScore);
+        return GameConverter.toChartDTO(gameCount, averageScore, highScore, lowScore, currentGameList);
     }
 }

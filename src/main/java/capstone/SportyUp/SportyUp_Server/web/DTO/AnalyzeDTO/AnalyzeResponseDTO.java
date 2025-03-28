@@ -5,18 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 public class AnalyzeResponseDTO {
-
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class DateScoreDTO{
-        LocalDate gameDate; //해당 날짜에
-        Integer gameScore;  //평균 몇 점인지
-    }
 
     @Builder
     @Getter
