@@ -1,5 +1,6 @@
 package capstone.SportyUp.SportyUp_Server.web.DTO.GameDTO;
 
+import capstone.SportyUp.SportyUp_Server.web.DTO.AnalyzeDTO.AnalyzeResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -68,4 +69,15 @@ public class GameResponseDTO {
         Integer score;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ChartDTO{
+        Long gameCount;  //전체 게임 수
+        Double averageScore; //전체 평균 점수
+        Integer highScore;  //최고 점수
+        Integer lowScore;   //최저 점수
+        List<AnalyzeResponseDTO.DateScoreDTO> dateScores;  //날짜별 점수 리스트
+    }
 }

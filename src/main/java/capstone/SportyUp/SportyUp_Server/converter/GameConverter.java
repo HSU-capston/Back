@@ -18,4 +18,13 @@ public class GameConverter {
                 .highlightUrl(game.getHighlightUrl())
                 .build();
     }
+
+    public static GameResponseDTO.ChartDTO toChartDTO(Long gameCount, Double averageScore, Integer highScore, Integer lowScore){
+        return GameResponseDTO.ChartDTO.builder()
+                .gameCount(gameCount)
+                .averageScore(averageScore)
+                .highScore(highScore)
+                .lowScore(lowScore)
+                .build();
+    }
 }

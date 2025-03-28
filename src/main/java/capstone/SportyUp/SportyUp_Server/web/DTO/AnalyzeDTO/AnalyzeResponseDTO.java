@@ -6,21 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public class AnalyzeResponseDTO {
-
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ChartDTO{
-        Long gameCount;  //전체 게임 수
-        Double averageScore; //전체 평균 점수
-        Integer highScore;  //최고 점수
-        Integer lowScore;   //최저 점수
-        List<DateScoreDTO> dateScores;  //날짜별 점수 리스트
-    }
 
     @Builder
     @Getter

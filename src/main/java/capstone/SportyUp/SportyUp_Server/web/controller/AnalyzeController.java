@@ -18,12 +18,6 @@ public class AnalyzeController implements AnalyzeSpecification {
     private final AnalyzeQueryService analyzeQueryService;
 
     @Override
-    public ApiResponse<AnalyzeResponseDTO.ChartDTO> getChart(Long userId, Long sportsId) {
-
-        return ApiResponse.onSuccess(analyzeQueryService.getChart(userId, sportsId));
-    }
-
-    @Override
     public ApiResponse<AnalyzeResponseDTO.BowlingDTO> getBowlingAnalyze(Long analyzeId) {
         return null;
     }

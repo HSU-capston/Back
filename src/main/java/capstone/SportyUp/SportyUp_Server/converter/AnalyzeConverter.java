@@ -12,13 +12,4 @@ public class AnalyzeConverter{
                    .videoUrl(analyzeEntity.getVideoUrl())
                    .build();
     }
-
-    public static AnalyzeResponseDTO.ChartDTO toChartDTO(Long gameCount, Double averageScore, Integer highScore, Integer lowScore){
-            return AnalyzeResponseDTO.ChartDTO.builder()
-                    .gameCount(gameCount)
-                    .averageScore(averageScore)
-                    .highScore(highScore)
-                    .lowScore(lowScore)
-                    .build();
-    }
 }
