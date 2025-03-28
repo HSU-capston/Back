@@ -70,4 +70,23 @@ public class GameQueryServiceImpl implements GameQueryService {
 
         return GameConverter.toGameDateListDTO(distinctByDate);
     }
+
+    @Override
+    public GameResponseDTO.GameDateListDTO getGameDateListOneCategory(Long userId, Integer year, Integer month, Long sportsId) {
+        User user = userRepository.findById(userId).orElse(null);   //Todo: 유저 확인
+        List<Game> gameList = gameRepository.findByUserIdAndSportsIdAndYearAndMonth(userId,sportsId,year,month);
+
+        // playDate 기준으로 날짜(LocalDate) 중복 제거
+        List<Game> distinctByDate = gameList.stream()
+                .collect(Collectors.collectingAndThen(
+                        Collectors.toMap(
+                                game -> game.getPlayDate().toLocalDate(), // 날짜만 key로 사용
+                                game -> game,
+                                (existing, replacement) -> existing // 중복 시 첫 번째 것 유지
+                        ),
+                        map -> new ArrayList<>(map.values())
+                ));
+
+        return GameConverter.toGameDateListDTO(distinctByDate);
+    }
 }

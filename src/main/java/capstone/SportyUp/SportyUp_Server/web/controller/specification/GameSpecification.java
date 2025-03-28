@@ -32,7 +32,7 @@ public interface GameSpecification {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "DATE4001", description = "날짜가 잘못되었습니다.")
     })
-    ApiResponse<GameResponseDTO.GameDateListDTO> getGameDateListOneCategory(@RequestParam Long userId, @RequestParam Integer year, @RequestParam Integer month);
+    ApiResponse<GameResponseDTO.GameDateListDTO> getGameDateListOneCategory(@RequestParam Long userId, @RequestParam Integer year, @RequestParam Integer month, @PathVariable Long sportsId);
 
 
     @GetMapping("/{gameId}")
