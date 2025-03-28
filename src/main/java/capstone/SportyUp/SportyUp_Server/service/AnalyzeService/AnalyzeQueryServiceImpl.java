@@ -22,4 +22,12 @@ public class AnalyzeQueryServiceImpl implements AnalyzeQueryService {
 
         return AnalyzeConverter.toAnalyzeInfoListDTO(analyzeList);
     }
+
+    @Override
+    public AnalyzeResponseDTO.AnalyzeDetailDTO getAnalyze(Long analyzeId) {
+
+        AnalyzeEntity analyze = analyzeRepository.findById(analyzeId).orElse(null);
+
+        return AnalyzeConverter.toAnalyzeDetailDTO(analyze);
+    }
 }

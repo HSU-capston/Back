@@ -47,4 +47,15 @@ public class AnalyzeResponseDTO {
         List<AnalyzeInfoDTO> analyzeList;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AnalyzeDetailDTO{
+        Long id;
+        String poseScore;
+        String recommendPose;
+        String videoUrl;
+    }
+
 }

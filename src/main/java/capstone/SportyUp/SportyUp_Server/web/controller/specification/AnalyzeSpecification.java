@@ -13,7 +13,7 @@ public interface AnalyzeSpecification {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
-    ApiResponse<AnalyzeResponseDTO.BowlingDTO> getAnalyze(@PathVariable Long analyzeId);
+    ApiResponse<AnalyzeResponseDTO.AnalyzeDetailDTO> getAnalyze(@PathVariable Long analyzeId);
 
     @GetMapping("/{gameId}/list")
     @Operation(summary = "상세 분석 리스트 조회 API", description = "한 게임의 분석들의 리스트를 조회하는 API입니다. PathVariable로 gameId 필요")

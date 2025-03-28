@@ -30,4 +30,14 @@ public class AnalyzeConverter{
                 .listSize(analyzeInfoDTOList.size())
                 .build();
     }
+
+    public static AnalyzeResponseDTO.AnalyzeDetailDTO toAnalyzeDetailDTO(AnalyzeEntity analyze){
+
+        return AnalyzeResponseDTO.AnalyzeDetailDTO.builder()
+                .id(analyze.getId())
+                .poseScore(String.valueOf(analyze.getPoseScore()))
+                .recommendPose(analyze.getRecommendPose())
+                .videoUrl(analyze.getVideoUrl())
+                .build();
+    }
 }
