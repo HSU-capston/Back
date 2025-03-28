@@ -25,8 +25,8 @@ public class GameResponseDTO {
     @AllArgsConstructor
     public static class GameInfoDTO{
         Long id;        //게임 번호
-        String sports;  //스포츠 종목
-        LocalDate playDate; //게임 진행 날짜
+        Long sportsId;  //스포츠 종목
+        LocalDateTime playDate; //게임 진행 날짜
         Integer score;  //점수
     }
 

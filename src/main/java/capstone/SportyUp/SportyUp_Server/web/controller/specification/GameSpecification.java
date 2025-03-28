@@ -11,12 +11,19 @@ import java.time.LocalDate;
 
 public interface GameSpecification {
 
-    @GetMapping("")
-    @Operation(summary = "게임 리스트 조회 API", description = "한 날짜에 진행된 게임들의 리스트를 보여주는 API입니다. QueryString으로 date, sports 필요")
+    @GetMapping("/list")
+    @Operation(summary = "게임 리스트 조회(전체종목) API", description = "한 날짜에 진행된 전체종목 게임들의 리스트를 보여주는 API입니다. QueryString으로 date필요")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
-    ApiResponse<GameResponseDTO.GameInfoListDTO> getGameList(@RequestParam LocalDate date, @RequestParam String sports);
+    ApiResponse<GameResponseDTO.GameInfoListDTO> getGameListAllCategory(@RequestParam Long userId, @RequestParam LocalDate date);
+
+    @GetMapping("/{sportsId}/list")
+    @Operation(summary = "게임 리스트 조회(한 개 종목) API", description = "한 날짜에 진행된 전체종목 게임들의 리스트를 보여주는 API입니다. QueryString으로 date필요, PathVariable로 sportsId 필요")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+    })
+    ApiResponse<GameResponseDTO.GameInfoListDTO> getGameListOneCategory(@RequestParam Long userId, @RequestParam LocalDate date, @PathVariable Long sportsId);
 
     @GetMapping("/dates")
     @Operation(summary = "캘린더 탭 조회(전체종목) API", description = "달력에서 전체종목으로 게임이 진행된 날짜를 표시하기 위한 API입니다. QueryString으로 year와 month 필요")
