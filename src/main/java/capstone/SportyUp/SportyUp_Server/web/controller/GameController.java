@@ -28,7 +28,8 @@ public class GameController implements GameSpecification {
 
     @Override
     public ApiResponse<GameResponseDTO.GameDateListDTO> getGameDateListAllCategory(Long userId, Integer year, Integer month) {
-        return null;
+
+        return ApiResponse.onSuccess(gameQueryService.getGameDateListAllCategory(userId,year,month));
     }
 
     @Override
