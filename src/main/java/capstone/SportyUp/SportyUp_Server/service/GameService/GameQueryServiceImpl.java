@@ -9,6 +9,7 @@ import capstone.SportyUp.SportyUp_Server.web.DTO.GameDTO.GameResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -88,5 +89,32 @@ public class GameQueryServiceImpl implements GameQueryService {
                 ));
 
         return GameConverter.toGameDateListDTO(distinctByDate);
+    }
+
+    @Override
+    public GameResponseDTO.GameInfoListDTO getGameListAllCategory(Long userId, LocalDate date) {
+
+        User user = userRepository.findById(userId).orElse(null);
+        Integer year = date.getYear();
+        Integer month = date.getMonthValue();
+        Integer day = date.getDayOfMonth();
+
+        List<Game> gameList = gameRepository.findByUserIdAndPlayDate(userId, year, month, day);
+
+
+        return GameConverter.toGameInfoListDTO(gameList);
+    }
+
+    @Override
+    public GameResponseDTO.GameInfoListDTO getGameListOneCategory(Long userId, LocalDate date, Long sportsId) {
+
+        User user = userRepository.findById(userId).orElse(null);
+        Integer year = date.getYear();
+        Integer month = date.getMonthValue();
+        Integer day = date.getDayOfMonth();
+
+        List<Game> gameList = gameRepository.findByUserIdAndSportsIdAndPlayDate(userId, sportsId, year, month, day);
+
+        return GameConverter.toGameInfoListDTO(gameList);
     }
 }

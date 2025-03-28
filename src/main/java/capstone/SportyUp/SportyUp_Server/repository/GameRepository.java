@@ -27,5 +27,23 @@ public interface GameRepository extends JpaRepository<Game, Long> {
             @Param("year") Integer year,
             @Param("month") Integer month
     );
+
+    @Query("SELECT g FROM Game g WHERE g.user.id = :userId AND YEAR(g.playDate) = :year AND MONTH(g.playDate) = :month AND DAY(g.playDate) = :day ORDER BY g.playDate DESC")
+    List<Game> findByUserIdAndPlayDate(
+            @Param("userId") Long userId,
+            @Param("year") Integer year,
+            @Param("month") Integer month,
+            @Param("day") Integer day
+    );
+
+    @Query("SELECT g FROM Game g WHERE g.user.id = :userId AND g.sports.id = :sportsId AND YEAR(g.playDate) = :year AND MONTH(g.playDate) = :month AND DAY(g.playDate) = :day ORDER BY g.playDate DESC")
+    List<Game> findByUserIdAndSportsIdAndPlayDate(
+            @Param("userId") Long userId,
+            @Param("sportsId") Long sportsId,
+            @Param("year") Integer year,
+            @Param("month") Integer month,
+            @Param("day") Integer day
+    );
+
 }
 

@@ -55,4 +55,21 @@ public class GameConverter {
                 .gameDateList(dateList)
                 .build();
     }
+
+    public static GameResponseDTO.GameInfoListDTO toGameInfoListDTO(List<Game> gameList){
+        List<GameResponseDTO.GameInfoDTO> result = new ArrayList<>();
+        for(Game game : gameList){
+            result.add(GameResponseDTO.GameInfoDTO.builder()
+                    .id(game.getId())
+                    .sportsId(game.getSports().getId())
+                    .score(game.getScore())
+                    .playDate(game.getPlayDate())
+                    .build());
+        }
+
+        return GameResponseDTO.GameInfoListDTO.builder()
+                .gameInfoList(result)
+                .build();
+
+    }
 }
