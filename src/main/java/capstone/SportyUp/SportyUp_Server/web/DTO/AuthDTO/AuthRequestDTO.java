@@ -16,4 +16,16 @@ public class AuthRequestDTO {
         @NotNull
         String phoneNum;
     }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SmsVerifyDTO{
+        @NotNull
+        String phoneNum;
+
+        @NotNull
+        String code;
+    }
 }

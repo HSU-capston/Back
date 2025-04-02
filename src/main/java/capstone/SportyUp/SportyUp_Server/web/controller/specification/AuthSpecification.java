@@ -17,4 +17,11 @@ public interface AuthSpecification {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
     ApiResponse<AuthResponseDTO.SmsSendResultDTO> sendSms(@RequestBody AuthRequestDTO.SmsSendDTO request) throws CoolsmsException;
+
+    @PostMapping("/sms/verification")
+    @Operation(summary = "인증번호 인증 API", description = "사용자 인증을 위한 인증번호 확인 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+    })
+    ApiResponse<AuthResponseDTO.SmsVerifyResultDTO> verifySms(@RequestBody AuthRequestDTO.SmsVerifyDTO request);
 }

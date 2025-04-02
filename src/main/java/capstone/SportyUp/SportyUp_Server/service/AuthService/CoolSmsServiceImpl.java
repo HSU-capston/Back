@@ -58,7 +58,7 @@ public class CoolSmsServiceImpl implements CoolSmsService {
 
         smsVerificationRepository.save(smsVerification);
 
-        return AuthConverter.toSmsSendResultDTO();
+        return AuthConverter.toSmsSendResultDTO(smsVerification);
     }
 
     // 랜덤한 4자리 숫자 생성 메서드

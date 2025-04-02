@@ -6,11 +6,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 public class AuthResponseDTO {
+
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SmsSendResultDTO{
-        String message;
+        private String phoneNum;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SmsVerifyResultDTO{
+        private String code;
     }
 }

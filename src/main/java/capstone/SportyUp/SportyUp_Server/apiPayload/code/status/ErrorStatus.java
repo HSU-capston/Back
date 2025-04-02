@@ -14,7 +14,12 @@ public enum ErrorStatus implements BaseErrorCode {
     _INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON500", "서버 에러, 관리자에게 문의 바랍니다."),
     _BAD_REQUEST(HttpStatus.BAD_REQUEST, "COMMON400", "잘못된 요청입니다."),
     _UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "COMMON401", "인증이 필요합니다."),
-    _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다.");
+    _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
+
+    //인증 관련 에러
+    AUTH_CODE_NOT_FOUND(HttpStatus.FORBIDDEN, "AUTH4001", "인증번호나 전화번호를 찾을 수 없습니다."),
+    AUTH_ALREADY_VERIFIED(HttpStatus.FORBIDDEN, "AUTH4002", "이미 완료된 인증입니다."),
+    AUTH_CODE_MISMATCH(HttpStatus.FORBIDDEN, "AUTH4003", "인증번호가 일치하지 않습니다.");
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;

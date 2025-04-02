@@ -2,6 +2,7 @@ package capstone.SportyUp.SportyUp_Server.web.controller;
 
 import capstone.SportyUp.SportyUp_Server.apiPayload.ApiResponse;
 import capstone.SportyUp.SportyUp_Server.service.AuthService.CoolSmsService;
+import capstone.SportyUp.SportyUp_Server.service.AuthService.VerifyService;
 import capstone.SportyUp.SportyUp_Server.web.DTO.AuthDTO.AuthRequestDTO;
 import capstone.SportyUp.SportyUp_Server.web.DTO.AuthDTO.AuthResponseDTO;
 import capstone.SportyUp.SportyUp_Server.web.controller.specification.AuthSpecification;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController implements AuthSpecification {
 
     private final CoolSmsService coolSmsService;
+    private final VerifyService verifyService;
 
     @Override
     public ApiResponse<AuthResponseDTO.SmsSendResultDTO> sendSms(AuthRequestDTO.SmsSendDTO request){
@@ -24,5 +26,11 @@ public class AuthController implements AuthSpecification {
         } catch (CoolsmsException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public ApiResponse<AuthResponseDTO.SmsVerifyResultDTO> verifySms(AuthRequestDTO.SmsVerifyDTO request) {
+
+        return ApiResponse.onSuccess(verifyService.verifySms(request));
     }
 }
