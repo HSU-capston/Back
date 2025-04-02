@@ -39,6 +39,9 @@ dependencies {
 	//Swagger 관련
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
 
+	//coolSMS - 문자 전송 서비스
+	implementation group: 'net.nurigo', name: 'javaSDK', version: '2.2'
+
 
 }
 
