@@ -12,6 +12,7 @@ public class AuthConverter {
 
     public static AuthResponseDTO.SmsVerifyResultDTO toSmsVerifyResultDTO(SmsVerification smsVerification){
         return AuthResponseDTO.SmsVerifyResultDTO.builder()
+                .phoneNum(smsVerification.getPhoneNum())
                 .code(smsVerification.getVerificationCode())
                 .build();
     }

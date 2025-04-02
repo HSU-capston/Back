@@ -20,6 +20,7 @@ public class AuthResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SmsVerifyResultDTO{
+        private String phoneNum;
         private String code;
     }
 }
