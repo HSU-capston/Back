@@ -1,6 +1,7 @@
 package capstone.SportyUp.SportyUp_Server.domain;
 
 import capstone.SportyUp.SportyUp_Server.domain.common.BaseEntity;
+import capstone.SportyUp.SportyUp_Server.domain.enums.Role;
 import capstone.SportyUp.SportyUp_Server.domain.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -43,6 +44,9 @@ public class User extends BaseEntity {
     private String profileImgUrl;
 
     private String backgroundImgUrl;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     public void encodePassword(String password) {
         this.password = password;

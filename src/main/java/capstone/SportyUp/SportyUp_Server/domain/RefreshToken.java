@@ -3,6 +3,8 @@ package capstone.SportyUp.SportyUp_Server.domain;
 import capstone.SportyUp.SportyUp_Server.domain.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -19,6 +21,7 @@ public class RefreshToken extends BaseEntity {
     private Long id;
 
     @OneToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @Column(nullable = false, columnDefinition = "TEXT")

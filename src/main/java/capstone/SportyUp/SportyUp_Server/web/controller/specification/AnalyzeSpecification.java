@@ -27,5 +27,5 @@ public interface AnalyzeSpecification {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
-    ApiResponse<AnalyzeResponseDTO.AnalyzeResultDTO> requestAnalyze(@RequestParam Long userId,@PathVariable Long gameId, @ModelAttribute AnalyzeRequestDTO.BowlingDTO request);
+    ApiResponse<AnalyzeResponseDTO.AnalyzeResultDTO> requestAnalyze(@PathVariable Long gameId, @ModelAttribute AnalyzeRequestDTO.BowlingDTO request);
 }

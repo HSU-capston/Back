@@ -9,4 +9,11 @@ public class UserConverter {
                 .refreshToken(refreshToken)
                 .build();
     }
+
+    public static UserResponseDTO.LoginResultDTO toLoginResultDTO(String accessToken, String refreshToken) {
+        return UserResponseDTO.LoginResultDTO.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
 }

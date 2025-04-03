@@ -1,15 +1,21 @@
 package capstone.SportyUp.SportyUp_Server.service.AuthService;
 
+import capstone.SportyUp.SportyUp_Server.apiPayload.Exception.UserHandler;
+import capstone.SportyUp.SportyUp_Server.apiPayload.code.status.ErrorStatus;
 import capstone.SportyUp.SportyUp_Server.domain.RefreshToken;
 import capstone.SportyUp.SportyUp_Server.domain.User;
+import capstone.SportyUp.SportyUp_Server.domain.enums.Role;
 import capstone.SportyUp.SportyUp_Server.repository.RefreshTokenRepository;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -24,26 +30,33 @@ public class JwtService {
     private final long refreshTokenExpirationMs = 1000L * 60 * 60 * 24 * 7; //7일
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public String createAccessToken(Long userId, String email){
-        return Jwts.builder()
+    public String createAccessToken(Long userId, Role role) {
+
+        // Access Token 생성
+        String accessToken = Jwts.builder()
                 .setSubject("AccessToken")
                 .claim("userId", userId)
-                .claim("email", email)
+                .claim("role","ROLE_"+role.name())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis()+accessTokenExpirationMs))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpirationMs))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
+
+        return accessToken;
     }
 
     public String createRefreshToken(Long userId){
 
-        return Jwts.builder()
+        // Refresh Token 생성
+        String refreshToken = Jwts.builder()
                 .setSubject("RefreshToken")
                 .claim("userId", userId)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis()+refreshTokenExpirationMs))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
+
+        return refreshToken;
     }
 
     public void saveRefreshToken(User user, String token){
@@ -57,28 +70,45 @@ public class JwtService {
 
     }
 
-    public String extractEmail(String token){
+    public void refreshTokenUpdate(User user, String newToken){
+        RefreshToken refreshToken = refreshTokenRepository.findByUser(user).orElseThrow(() -> new UserHandler(ErrorStatus.REFRESH_TOKEN_NOT_FOUND));
+
+        refreshToken.setToken(newToken);
+        refreshToken.setExpiredAt(LocalDateTime.now().plus(Duration.ofMillis(refreshTokenExpirationMs)));
+
+        refreshTokenRepository.save(refreshToken);
+    }
+
+    public Long extractUserId(String token) {
         return Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody()
-                .get("email", String.class);
+                .get("userId", Long.class);
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails){
-        String email = extractEmail(token);
-
-        return email.equals(userDetails.getUsername()) && !isTokenExpired(token);
-    }
-
-    private boolean isTokenExpired(String token){
-        Date expiration = Jwts.parser()
+    public String extractRole(String token) {
+        return Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody()
-                .getExpiration();
-
-        return expiration.before(new Date());
+                .get("role", String.class);
     }
+
+    public boolean isTokenValid(String token){
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token) //예외 발생 시 예외 던짐
+                .getBody();
+
+        return true;
+    }
+
+    private SecretKey getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey); // jjwt.io의 Decoders 사용
+        return Keys.hmacShaKeyFor(keyBytes); // HMAC 전용 키 생성
+    }
+
 
 }

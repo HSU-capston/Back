@@ -49,4 +49,14 @@ public class UserRequestDTO {
         @Size(min = 1, max = 50, message = "크기는 1에서 50 사이입니다.")
         private String phone_num;
     }
+
+
+    @Getter
+    @Setter
+    public static class LoginDTO{
+        @NotBlank
+        private String email;
+        @NotBlank
+        private String password;
+    }
 }

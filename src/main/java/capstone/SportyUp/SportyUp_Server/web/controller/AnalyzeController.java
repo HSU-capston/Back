@@ -7,6 +7,8 @@ import capstone.SportyUp.SportyUp_Server.web.DTO.AnalyzeDTO.AnalyzeRequestDTO;
 import capstone.SportyUp.SportyUp_Server.web.DTO.AnalyzeDTO.AnalyzeResponseDTO;
 import capstone.SportyUp.SportyUp_Server.web.controller.specification.AnalyzeSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,9 +32,9 @@ public class AnalyzeController implements AnalyzeSpecification {
     }
 
     @Override
-    public ApiResponse<AnalyzeResponseDTO.AnalyzeResultDTO> requestAnalyze(Long userId, Long gameId, AnalyzeRequestDTO.BowlingDTO request) {
-
-
+    public ApiResponse<AnalyzeResponseDTO.AnalyzeResultDTO> requestAnalyze(Long gameId, AnalyzeRequestDTO.BowlingDTO request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = (Long) authentication.getPrincipal();
 
         return ApiResponse.onSuccess(analyzeCommandService.requestAnalyze(userId, gameId, request));
     }
