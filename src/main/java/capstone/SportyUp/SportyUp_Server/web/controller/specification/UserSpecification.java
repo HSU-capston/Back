@@ -36,7 +36,7 @@ public interface UserSpecification {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4002", description = "잘못된 사용자 정보입니다."),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4002", description = "이미 등록된 사용자입니다.")
     })
-    ApiResponse<UserResponseDTO.JoinResultDTO> emailSignUp(@RequestBody UserRequestDTO.JoinDTO request);
+    ApiResponse<UserResponseDTO.SignUpResultDTO> emailSignUp(@RequestBody UserRequestDTO.SingUpDTO request);
 
     @PostMapping("/kakao")
     @Operation(summary = "카카오 회원가입 API", description = "카카오로 회원가입하는 API, RequestBody에 회원가입에 입력한 사용자 정보를 보내주세요")
@@ -45,7 +45,7 @@ public interface UserSpecification {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4002", description = "잘못된 사용자 정보입니다."),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4002", description = "이미 등록된 사용자입니다.")
     })
-    ApiResponse<UserResponseDTO.JoinResultDTO> kakaoSignUp(@RequestBody UserRequestDTO.JoinDTO request);
+    ApiResponse<UserResponseDTO.SignUpResultDTO> kakaoSignUp(@RequestBody UserRequestDTO.SingUpDTO request);
 
     @PostMapping("/naver")
     @Operation(summary = "네이버 회원가입 API", description = "네이버로 회원가입하는 API, RequestBody에 회원가입에 입력한 사용자 정보를 보내주세요")
@@ -54,7 +54,7 @@ public interface UserSpecification {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4002", description = "잘못된 사용자 정보입니다."),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4002", description = "이미 등록된 사용자입니다.")
     })
-    ApiResponse<UserResponseDTO.JoinResultDTO> naverSignUp(@RequestBody UserRequestDTO.JoinDTO request);
+    ApiResponse<UserResponseDTO.SignUpResultDTO> naverSignUp(@RequestBody UserRequestDTO.SingUpDTO request);
 
 
 

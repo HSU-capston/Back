@@ -5,6 +5,7 @@ import capstone.SportyUp.SportyUp_Server.domain.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,7 +23,7 @@ public class User extends BaseEntity {
     @Column(unique = true, length = 50, nullable = false)
     private String email;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 100, nullable = false)
     private String password;
 
     @Column(length = 20, nullable = false)
@@ -30,6 +31,8 @@ public class User extends BaseEntity {
 
     @Column(length = 50, nullable = false)
     private String phoneNum;
+
+    private LocalDate birthday;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -41,4 +44,7 @@ public class User extends BaseEntity {
 
     private String backgroundImgUrl;
 
+    public void encodePassword(String password) {
+        this.password = password;
+    }
 }

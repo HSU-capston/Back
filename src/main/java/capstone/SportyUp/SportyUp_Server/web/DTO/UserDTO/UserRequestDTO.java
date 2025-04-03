@@ -5,25 +5,23 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.time.LocalDate;
+
 public class UserRequestDTO {
 
     @Getter
     @Setter
-    public static class JoinDTO{
+    public static class SingUpDTO{
         @NotBlank
         private String email;
         @NotBlank
         private String password;
         @NotBlank
-        private String name;
+        private String nickname;
         @NotBlank
-        private String phone_num;
+        private String phoneNum;
         @NotBlank
-        private String prefer_sports;
-        @NotBlank
-        private String level;
-        @NotBlank
-        private String goal;
+        private LocalDate birthday;
     }
 
 
