@@ -2,7 +2,7 @@ package capstone.SportyUp.SportyUp_Server.service.AuthService;
 
 import capstone.SportyUp.SportyUp_Server.domain.RefreshToken;
 import capstone.SportyUp.SportyUp_Server.domain.User;
-import capstone.SportyUp.SportyUp_Server.repository.UserRepository;
+import capstone.SportyUp.SportyUp_Server.repository.RefreshTokenRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class JwtService {
     private String secretKey;
     private final long accessTokenExpirationMs = 1000 * 60 * 60; //AccessToken만료시간 1시간
     private final long refreshTokenExpirationMs = 1000L * 60 * 60 * 24 * 7; //7일
-    private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public String createAccessToken(Long userId, String email){
         return Jwts.builder()
@@ -52,6 +52,9 @@ public class JwtService {
                 .token(token)
                 .expiredAt(LocalDateTime.now().plus(Duration.ofMillis(refreshTokenExpirationMs)))
                 .build();
+
+        refreshTokenRepository.save(refreshToken);
+
     }
 
     public String extractEmail(String token){

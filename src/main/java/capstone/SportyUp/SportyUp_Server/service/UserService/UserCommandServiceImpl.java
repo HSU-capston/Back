@@ -15,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -26,10 +28,11 @@ public class UserCommandServiceImpl implements UserCommandService {
     private final JwtService jwtService;
 
     @Override
+    @Transactional
     public UserResponseDTO.SignUpResultDTO emailSignUp(UserRequestDTO.SingUpDTO request) {
         //해당 전화번호 인증된 기록이 있는지 확인
         if(!smsVerificationRepository
-                .findTop1ByPhoneNumAndVerifiedIsTrueOrderByCreatedAtDesc(request.getPhoneNum())
+                .findTop1ByPhoneNumAndVerifiedIsTrueAndExpiresAtAfterOrderByCreatedAtDesc(request.getPhoneNum(), LocalDateTime.now())
                 .isPresent()) throw new AuthHandler(ErrorStatus.AUTH_REQUIRED_VERIFICATION);
 
         //유저 생성
