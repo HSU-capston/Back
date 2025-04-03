@@ -33,4 +33,15 @@ public class UserResponseDTO {
         @NotBlank
         private String refreshToken;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class LoginResultDTO{
+        @NotBlank
+        private String accessToken;
+        @NotBlank
+        private String refreshToken;
+    }
 }

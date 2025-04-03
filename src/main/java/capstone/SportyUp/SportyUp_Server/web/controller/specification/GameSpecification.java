@@ -16,14 +16,14 @@ public interface GameSpecification {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
-    ApiResponse<GameResponseDTO.GameInfoListDTO> getGameListAllCategory(@RequestParam Long userId, @RequestParam LocalDate date);
+    ApiResponse<GameResponseDTO.GameInfoListDTO> getGameListAllCategory(@RequestParam LocalDate date);
 
     @GetMapping("/{sportsId}/list")
     @Operation(summary = "게임 리스트 조회(한 개 종목) API", description = "한 날짜에 진행된 전체종목 게임들의 리스트를 보여주는 API입니다. QueryString으로 date필요, PathVariable로 sportsId 필요")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
-    ApiResponse<GameResponseDTO.GameInfoListDTO> getGameListOneCategory(@RequestParam Long userId, @RequestParam LocalDate date, @PathVariable Long sportsId);
+    ApiResponse<GameResponseDTO.GameInfoListDTO> getGameListOneCategory(@RequestParam LocalDate date, @PathVariable Long sportsId);
 
     @GetMapping("/dates")
     @Operation(summary = "캘린더 탭 조회(전체종목) API", description = "달력에서 전체종목으로 게임이 진행된 날짜를 표시하기 위한 API입니다. QueryString으로 year와 month 필요")
@@ -31,7 +31,7 @@ public interface GameSpecification {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "DATE4001", description = "날짜가 잘못되었습니다.")
     })
-    ApiResponse<GameResponseDTO.GameDateListDTO> getGameDateListAllCategory(@RequestParam Long userId, @RequestParam Integer year, @RequestParam Integer month);
+    ApiResponse<GameResponseDTO.GameDateListDTO> getGameDateListAllCategory(@RequestParam Integer year, @RequestParam Integer month);
 
     @GetMapping("/dates/{sportsId}")
     @Operation(summary = "캘린더 탭 조회(한 개 종목) API", description = "달력에서 한 종목으로 게임이 진행된 날짜를 표시하기 위한 API입니다. QueryString으로 year와 month 필요")
@@ -39,7 +39,7 @@ public interface GameSpecification {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "DATE4001", description = "날짜가 잘못되었습니다.")
     })
-    ApiResponse<GameResponseDTO.GameDateListDTO> getGameDateListOneCategory(@RequestParam Long userId, @RequestParam Integer year, @RequestParam Integer month, @PathVariable Long sportsId);
+    ApiResponse<GameResponseDTO.GameDateListDTO> getGameDateListOneCategory(@RequestParam Integer year, @RequestParam Integer month, @PathVariable Long sportsId);
 
 
     @GetMapping("/{gameId}")
@@ -55,7 +55,7 @@ public interface GameSpecification {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
-    ApiResponse<GameResponseDTO.CreateResultDTO> createGameInMobile(@RequestParam Long userId, @RequestBody GameRequestDTO.CreateDTO request);
+    ApiResponse<GameResponseDTO.CreateResultDTO> createGameInMobile(@RequestBody GameRequestDTO.CreateDTO request);
 
     @PatchMapping("/{gameId}")
     @Operation(summary = "게임 종료 API", description = "게임 종료 API입니다. PathVariable로 gameId필요, 게임 종료 후 점수 입력 등등")
@@ -69,5 +69,5 @@ public interface GameSpecification {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
     })
-    ApiResponse<GameResponseDTO.ChartDTO> getChart(@RequestParam Long userId, @PathVariable Long sportsId);
+    ApiResponse<GameResponseDTO.ChartDTO> getChart(@PathVariable Long sportsId);
 }

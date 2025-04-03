@@ -8,6 +8,8 @@ import capstone.SportyUp.SportyUp_Server.web.DTO.GameDTO.GameRequestDTO;
 import capstone.SportyUp.SportyUp_Server.web.DTO.GameDTO.GameResponseDTO;
 import capstone.SportyUp.SportyUp_Server.web.controller.specification.GameSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,25 +24,36 @@ public class GameController implements GameSpecification {
     private final GameQueryService gameQueryService;
 
     @Override
-    public ApiResponse<GameResponseDTO.GameInfoListDTO> getGameListAllCategory(Long userId, LocalDate date) {
+    public ApiResponse<GameResponseDTO.GameInfoListDTO> getGameListAllCategory(LocalDate date) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = (Long) authentication.getPrincipal();
 
         return ApiResponse.onSuccess(gameQueryService.getGameListAllCategory(userId, date));
     }
 
     @Override
-    public ApiResponse<GameResponseDTO.GameInfoListDTO> getGameListOneCategory(Long userId, LocalDate date, Long sportsId) {
+    public ApiResponse<GameResponseDTO.GameInfoListDTO> getGameListOneCategory(LocalDate date, Long sportsId) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = (Long) authentication.getPrincipal();
 
         return ApiResponse.onSuccess(gameQueryService.getGameListOneCategory(userId, date, sportsId));
     }
 
     @Override
-    public ApiResponse<GameResponseDTO.GameDateListDTO> getGameDateListAllCategory(Long userId, Integer year, Integer month) {
+    public ApiResponse<GameResponseDTO.GameDateListDTO> getGameDateListAllCategory(Integer year, Integer month) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = (Long) authentication.getPrincipal();
 
         return ApiResponse.onSuccess(gameQueryService.getGameDateListAllCategory(userId,year,month));
     }
 
     @Override
-    public ApiResponse<GameResponseDTO.GameDateListDTO> getGameDateListOneCategory(Long userId, Integer year, Integer month, Long sportsId) {
+    public ApiResponse<GameResponseDTO.GameDateListDTO> getGameDateListOneCategory(Integer year, Integer month, Long sportsId) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = (Long) authentication.getPrincipal();
 
         return ApiResponse.onSuccess(gameQueryService.getGameDateListOneCategory(userId,year,month,sportsId));
     }
@@ -52,7 +65,10 @@ public class GameController implements GameSpecification {
     }
 
     @Override
-    public ApiResponse<GameResponseDTO.CreateResultDTO> createGameInMobile(Long userId, GameRequestDTO.CreateDTO request) {
+    public ApiResponse<GameResponseDTO.CreateResultDTO> createGameInMobile(GameRequestDTO.CreateDTO request) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = (Long) authentication.getPrincipal();
 
         return ApiResponse.onSuccess(gameCommandService.createGame(userId, request));
     }
@@ -65,7 +81,10 @@ public class GameController implements GameSpecification {
     }
 
     @Override
-    public ApiResponse<GameResponseDTO.ChartDTO> getChart(Long userId, Long sportsId) {
+    public ApiResponse<GameResponseDTO.ChartDTO> getChart(Long sportsId) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = (Long) authentication.getPrincipal();
 
         return ApiResponse.onSuccess(gameQueryService.getChart(userId, sportsId));
     }

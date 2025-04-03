@@ -33,9 +33,10 @@ public class SecurityConfig {
                                 "/webjars/**",
                                 "/users/email",
                                 "/users/kakao",
-                                "/users/naver"
+                                "/users/naver",
+                                "/login/**"
                                 ).permitAll()    //회원가입, 로그인, 스웨거 화면은 허용
-                        .anyRequest().authenticated()   //나머지는 인증 필요
+                        .anyRequest().hasRole("USER")  // 나머지는 USER 권한 필요
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
