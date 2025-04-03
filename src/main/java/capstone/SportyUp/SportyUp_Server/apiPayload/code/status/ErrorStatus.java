@@ -19,7 +19,13 @@ public enum ErrorStatus implements BaseErrorCode {
     //인증 관련 에러
     AUTH_CODE_NOT_FOUND(HttpStatus.FORBIDDEN, "AUTH4001", "인증번호나 전화번호를 찾을 수 없습니다."),
     AUTH_ALREADY_VERIFIED(HttpStatus.FORBIDDEN, "AUTH4002", "이미 완료된 인증입니다."),
-    AUTH_CODE_MISMATCH(HttpStatus.FORBIDDEN, "AUTH4003", "인증번호가 일치하지 않습니다.");
+    AUTH_CODE_MISMATCH(HttpStatus.FORBIDDEN, "AUTH4003", "인증번호가 일치하지 않습니다."),
+    AUTH_REQUIRED_VERIFICATION(HttpStatus.FORBIDDEN, "AUTH4003", "전화번호 인증이 필요합니다."),
+
+    //유저 관련 에러
+    USER_DUPLICATE_EMAIL(HttpStatus.FORBIDDEN, "USER4001", "이메일이 중복됩니다."),
+    USER_EMAIL_NOT_FOUND(HttpStatus.FORBIDDEN, "USER4002", "이메일이 없습니다.");
+
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;

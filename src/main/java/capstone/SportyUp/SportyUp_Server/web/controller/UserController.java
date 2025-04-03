@@ -1,6 +1,7 @@
 package capstone.SportyUp.SportyUp_Server.web.controller;
 
 import capstone.SportyUp.SportyUp_Server.apiPayload.ApiResponse;
+import capstone.SportyUp.SportyUp_Server.service.UserService.UserCommandService;
 import capstone.SportyUp.SportyUp_Server.web.DTO.UserDTO.UserRequestDTO;
 import capstone.SportyUp.SportyUp_Server.web.DTO.UserDTO.UserResponseDTO;
 import capstone.SportyUp.SportyUp_Server.web.controller.specification.UserSpecification;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController implements UserSpecification {
+    private final UserCommandService userCommandService;
     @Override
     public ApiResponse<UserResponseDTO.UserInfoDTO> getUserInfo() {
         return null;
@@ -23,17 +25,18 @@ public class UserController implements UserSpecification {
     }
 
     @Override
-    public ApiResponse<UserResponseDTO.JoinResultDTO> emailSignUp(UserRequestDTO.JoinDTO request) {
+    public ApiResponse<UserResponseDTO.SignUpResultDTO> emailSignUp(UserRequestDTO.SingUpDTO request) {
+
+        return ApiResponse.onSuccess(userCommandService.emailSignUp(request));
+    }
+
+    @Override
+    public ApiResponse<UserResponseDTO.SignUpResultDTO> kakaoSignUp(UserRequestDTO.SingUpDTO request) {
         return null;
     }
 
     @Override
-    public ApiResponse<UserResponseDTO.JoinResultDTO> kakaoSignUp(UserRequestDTO.JoinDTO request) {
-        return null;
-    }
-
-    @Override
-    public ApiResponse<UserResponseDTO.JoinResultDTO> naverSignUp(UserRequestDTO.JoinDTO request) {
+    public ApiResponse<UserResponseDTO.SignUpResultDTO> naverSignUp(UserRequestDTO.SingUpDTO request) {
         return null;
     }
 }

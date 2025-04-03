@@ -20,16 +20,17 @@ public class UserResponseDTO {
         @NotBlank
         private String password;
         @NotBlank
-        private String phone_num;
+        private String phoneNum;
     }
 
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class JoinResultDTO{
+    public static class SignUpResultDTO{
         @NotBlank
-        private String id;
-
+        private String accessToken;
+        @NotBlank
+        private String refreshToken;
     }
 }
