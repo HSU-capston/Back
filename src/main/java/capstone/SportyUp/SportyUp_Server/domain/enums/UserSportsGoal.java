@@ -1,5 +1,5 @@
 package capstone.SportyUp.SportyUp_Server.domain.enums;
 
 public enum UserSportsGoal {
-    GENERAL, AMATEUR, PROFESSIONAL  //초급, 중급, 고급
+    GENERAL, AMATEUR, PROFESSIONAL  //일반, 아마추어, 프로
 }

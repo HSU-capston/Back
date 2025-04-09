@@ -1,5 +1,7 @@
 package capstone.SportyUp.SportyUp_Server.web.DTO.UserDTO;
 
+import capstone.SportyUp.SportyUp_Server.domain.enums.UserSportsGoal;
+import capstone.SportyUp.SportyUp_Server.domain.enums.UserSportsLevel;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -64,6 +66,15 @@ public class UserRequestDTO {
     @Setter
     public static class SurveyDTO{
         @NotBlank
-        private String preferSports;
+        private Long sportsId;
+
+        @NotBlank
+        private String usageReason;
+
+        @NotBlank
+        private UserSportsLevel level;
+
+        @NotBlank
+        private UserSportsGoal goal;
     }
 }

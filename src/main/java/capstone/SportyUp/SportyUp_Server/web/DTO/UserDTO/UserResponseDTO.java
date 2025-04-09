@@ -50,7 +50,8 @@ public class UserResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SurveyResultDTO{
-
+        @NotBlank
+        private String message;
     }
 
 }

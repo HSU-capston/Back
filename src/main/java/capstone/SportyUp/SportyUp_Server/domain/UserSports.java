@@ -2,6 +2,7 @@ package capstone.SportyUp.SportyUp_Server.domain;
 
 import capstone.SportyUp.SportyUp_Server.domain.common.BaseEntity;
 import capstone.SportyUp.SportyUp_Server.domain.enums.UserSportsGoal;
+import capstone.SportyUp.SportyUp_Server.domain.enums.UserSportsLevel;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -18,10 +19,13 @@ public class UserSports extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int level;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserSportsLevel level;   //현재 실력
 
-
-    private UserSportsGoal goal;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserSportsGoal goal;    //본인 목표
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

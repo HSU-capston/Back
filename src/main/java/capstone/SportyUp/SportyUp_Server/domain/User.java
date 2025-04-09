@@ -48,6 +48,7 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+
     public void encodePassword(String password) {
         this.password = password;
     }
