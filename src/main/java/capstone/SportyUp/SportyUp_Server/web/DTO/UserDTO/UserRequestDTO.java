@@ -59,4 +59,11 @@ public class UserRequestDTO {
         @NotBlank
         private String password;
     }
+
+    @Getter
+    @Setter
+    public static class SurveyDTO{
+        @NotBlank
+        private String preferSports;
+    }
 }
