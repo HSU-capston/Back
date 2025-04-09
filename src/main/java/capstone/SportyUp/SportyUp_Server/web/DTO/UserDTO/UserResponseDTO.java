@@ -44,4 +44,14 @@ public class UserResponseDTO {
         @NotBlank
         private String refreshToken;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SurveyResultDTO{
+        @NotBlank
+        private String message;
+    }
+
 }

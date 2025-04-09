@@ -1,13 +1,18 @@
 package capstone.SportyUp.SportyUp_Server.service.UserService;
 
+import capstone.SportyUp.SportyUp_Server.apiPayload.Exception.SportsHandler;
 import capstone.SportyUp.SportyUp_Server.apiPayload.Exception.UserHandler;
 import capstone.SportyUp.SportyUp_Server.apiPayload.code.status.ErrorStatus;
 import capstone.SportyUp.SportyUp_Server.converter.UserConverter;
+import capstone.SportyUp.SportyUp_Server.domain.Sports;
 import capstone.SportyUp.SportyUp_Server.domain.User;
+import capstone.SportyUp.SportyUp_Server.domain.UserSports;
 import capstone.SportyUp.SportyUp_Server.domain.enums.Role;
 import capstone.SportyUp.SportyUp_Server.domain.enums.UserStatus;
 import capstone.SportyUp.SportyUp_Server.repository.SmsVerificationRepository;
+import capstone.SportyUp.SportyUp_Server.repository.SportsRepository;
 import capstone.SportyUp.SportyUp_Server.repository.UserRepository;
+import capstone.SportyUp.SportyUp_Server.repository.UserSportsRepository;
 import capstone.SportyUp.SportyUp_Server.service.AuthService.JwtService;
 import capstone.SportyUp.SportyUp_Server.web.DTO.UserDTO.UserRequestDTO;
 import capstone.SportyUp.SportyUp_Server.web.DTO.UserDTO.UserResponseDTO;
@@ -23,6 +28,8 @@ public class UserCommandServiceImpl implements UserCommandService {
 
     private final SmsVerificationRepository smsVerificationRepository;
     private final UserRepository userRepository;
+    private final SportsRepository sportsRepository;
+    private final UserSportsRepository userSportsRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
@@ -74,5 +81,20 @@ public class UserCommandServiceImpl implements UserCommandService {
         jwtService.refreshTokenUpdate(user, refreshToken);
 
         return UserConverter.toLoginResultDTO(accessToken,refreshToken);
+    }
+
+    @Override
+    public void surveyUser(Long userId, UserRequestDTO.SurveyDTO request) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
+        Sports sports = sportsRepository.findById(request.getSportsId()).orElseThrow(() -> new SportsHandler(ErrorStatus.SPORTS_NOT_FOUND));
+
+        UserSports userSports = UserSports.builder()
+                .user(user)
+                .sports(sports)
+                .level(request.getLevel())
+                .goal(request.getGoal())
+                .build();
+
+        userSportsRepository.save(userSports);
     }
 }

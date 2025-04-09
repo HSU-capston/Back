@@ -29,7 +29,10 @@ public enum ErrorStatus implements BaseErrorCode {
     USER_NOT_FOUND(HttpStatus.FORBIDDEN, "USER4004", "사용자를 찾을 수 없습니다."),
 
     //토큰관련 에러
-    REFRESH_TOKEN_NOT_FOUND(HttpStatus.FORBIDDEN, "TOKEN4001", "refresh token을 찾을 수 없습니다..");
+    REFRESH_TOKEN_NOT_FOUND(HttpStatus.FORBIDDEN, "TOKEN4001", "refresh token을 찾을 수 없습니다."),
+
+    //스포츠 관련 에러
+    SPORTS_NOT_FOUND(HttpStatus.FORBIDDEN, "SPORTS4001", "스포츠 종목을 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

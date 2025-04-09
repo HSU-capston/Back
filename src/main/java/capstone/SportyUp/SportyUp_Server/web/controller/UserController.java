@@ -6,6 +6,8 @@ import capstone.SportyUp.SportyUp_Server.web.DTO.UserDTO.UserRequestDTO;
 import capstone.SportyUp.SportyUp_Server.web.DTO.UserDTO.UserResponseDTO;
 import capstone.SportyUp.SportyUp_Server.web.controller.specification.UserSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,5 +40,15 @@ public class UserController implements UserSpecification {
     @Override
     public ApiResponse<UserResponseDTO.SignUpResultDTO> naverSignUp(UserRequestDTO.SingUpDTO request) {
         return null;
+    }
+
+    @Override
+    public ApiResponse surveyUser(UserRequestDTO.SurveyDTO request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = (Long) authentication.getPrincipal();
+
+        userCommandService.surveyUser(userId, request);
+
+        return ApiResponse.onSuccess();
     }
 }
