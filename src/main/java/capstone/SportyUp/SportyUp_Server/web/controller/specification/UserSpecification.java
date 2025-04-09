@@ -56,7 +56,7 @@ public interface UserSpecification {
     })
     ApiResponse<UserResponseDTO.SignUpResultDTO> naverSignUp(@RequestBody UserRequestDTO.SingUpDTO request);
 
-    @PatchMapping("/survey")
+    @PostMapping("/survey")
     @Operation(summary = "설문조사 API", description = "관심 종목, 앱 사용 이유, 실력과 목표를 설문조사 내용을 저장하는 API")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
