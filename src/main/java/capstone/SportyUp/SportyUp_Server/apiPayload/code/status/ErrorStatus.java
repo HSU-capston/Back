@@ -27,6 +27,7 @@ public enum ErrorStatus implements BaseErrorCode {
     USER_EMAIL_NOT_FOUND(HttpStatus.FORBIDDEN, "USER4002", "이메일이 없습니다."),
     USER_PASSWORD_IS_WRONG(HttpStatus.FORBIDDEN, "USER4003", "비밀번호가 잘못되었습니다."),
     USER_NOT_FOUND(HttpStatus.FORBIDDEN, "USER4004", "사용자를 찾을 수 없습니다."),
+    USER_SURVEY_NOT_FOUND(HttpStatus.FORBIDDEN, "USER4004", "설문조사 내역이 없습니다."),
 
     //토큰관련 에러
     REFRESH_TOKEN_NOT_FOUND(HttpStatus.FORBIDDEN, "TOKEN4001", "refresh token을 찾을 수 없습니다."),
