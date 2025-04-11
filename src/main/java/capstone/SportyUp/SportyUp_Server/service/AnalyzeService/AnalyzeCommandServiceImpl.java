@@ -52,10 +52,12 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
         MultipartFile targetVideo = request.getFile();
         String fileUrl = "";
         String videoUrl = "";
-        String message1 = "";
-        String message2 = "";
+        String recommendPose = "";
+        String goodPoint = "";
+        String badPoint = "";
         Double scoreDouble = (double) 0;
         Integer score = 0;  // Double을 Integer로 변환
+
         PoseScore poseScore = PoseScore.EXCELLENT;
         if (targetVideo.isEmpty()) {
             return null;
@@ -79,11 +81,13 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
             switch(targetSports.getName()){
                 case "볼링":
                     System.out.println("볼링분석스");
+
                     // Flask 서버로 파일 전송 및 처리된 파일 받기
                     Map<String, Object> response = sendFileToFlask(destination);
                     videoUrl = (String) response.get("video_url");
-                    message1 = (String) response.get("message1");
-                    message2 = (String) response.get("message2");
+                    recommendPose = (String) response.get("recommend");
+                    goodPoint = (String) response.get("good");
+                    badPoint = (String) response.get("bad");
                     scoreDouble = (Double) response.get("score");
                     score = scoreDouble.intValue();  // Double을 Integer로 변환
                     break;
@@ -116,7 +120,9 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
                 .game(targetGame)
                 .videoUrl(videoUrl)
                 .poseScore(poseScore)
-                .recommendPose(message1)
+                .goodPoint(goodPoint)
+                .badPoint(badPoint)
+                .recommendPose(recommendPose)
                 .build();
 
         newAnalyzeEntity = analyzeRepository.save(newAnalyzeEntity);
@@ -124,9 +130,9 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
         return AnalyzeConverter.toAnalyzeResultDTO(newAnalyzeEntity);
     }
 
-    private String getProcessedFileUrl(String fileName) {
-        return "http://localhost:8080/processed-files/" + fileName;
-    }
+//    private String getProcessedFileUrl(String fileName) {
+//        return "http://localhost:8080/processed-files/" + fileName;
+//    }
 
     private Map<String, Object> sendFileToFlask(File file) throws IOException {
         RestTemplate restTemplate = new RestTemplate();

@@ -26,8 +26,16 @@ public class AnalyzeEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private PoseScore poseScore;
 
-    @Column(nullable = false)
-    private String recommendPose;   //추천자세
+    private Integer score;
+
+    @Column(nullable = false, length = 255) //추천자세
+    private String recommendPose;
+
+    @Column(nullable = false, length = 255)   //잘한점
+    private String goodPoint;
+
+    @Column(nullable = false, length = 255)   //아쉬운점
+    private String badPoint;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_id")

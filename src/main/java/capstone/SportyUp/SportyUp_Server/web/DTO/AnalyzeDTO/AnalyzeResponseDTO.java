@@ -23,7 +23,7 @@ public class AnalyzeResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AnalyzeResultDTO{
+    public static class AnalyzeResultDTO{   //실시간 분석에서는 다음 자세 추천만 보여줌
         Long id;
         String poseScore;
         String recommendPose;
@@ -51,10 +51,12 @@ public class AnalyzeResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AnalyzeDetailDTO{
+    public static class AnalyzeDetailDTO{   //분석내용 자세히 보기는 아쉬운점, 잘한점까지 보여줌
         Long id;
         String poseScore;
         String recommendPose;
+        String goodPoint;
+        String badPoint;
         String videoUrl;
     }
 
