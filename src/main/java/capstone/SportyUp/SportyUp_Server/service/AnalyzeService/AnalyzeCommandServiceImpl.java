@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.Files;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +33,7 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
     private final GameRepository gameRepository;
     private final AnalyzeRepository analyzeRepository;
     private final UserRepository userRepository;
-    private final String FLASK_SERVER_URL = "http://127.0.0.1:5000";  // Flask 서버 URL (예시: http://localhost:5000)
+    private final String FLASK_SERVER_URL = "http://localhost:5000";  // Flask 서버 URL (예시: http://localhost:5000)
     @Value("${local-path.windows.upload}")
     private String UPLOAD_DIR;
     //    private static final String UPLOAD_DIR = "C:\\Users\\EliteBook\\Documents\\GitHub\\Back\\src\\main\\resources\\cam\\"; // 업로드된 파일 저장 폴더
@@ -50,9 +50,13 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
 
         //영상찾기
         MultipartFile targetVideo = request.getFile();
-        File processedFile = null;
         String fileUrl = "";
-
+        String videoUrl = "";
+        String message1 = "";
+        String message2 = "";
+        Double scoreDouble = (double) 0;
+        Integer score = 0;  // Double을 Integer로 변환
+        PoseScore poseScore = PoseScore.EXCELLENT;
         if (targetVideo.isEmpty()) {
             return null;
         }
@@ -69,12 +73,19 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
             System.out.println("파일 이름: " + targetVideo.getOriginalFilename());
             targetVideo.transferTo(destination);
 
+
             System.out.println(targetSports.getName());
             // Flask 서버로 파일 전송 및 처리된 파일 받기
             switch(targetSports.getName()){
                 case "볼링":
                     System.out.println("볼링분석스");
-                    processedFile = sendBowlingToFlask(destination);
+                    // Flask 서버로 파일 전송 및 처리된 파일 받기
+                    Map<String, Object> response = sendFileToFlask(destination);
+                    videoUrl = (String) response.get("video_url");
+                    message1 = (String) response.get("message1");
+                    message2 = (String) response.get("message2");
+                    scoreDouble = (Double) response.get("score");
+                    score = scoreDouble.intValue();  // Double을 Integer로 변환
                     break;
                 case "당구":
                     break;
@@ -84,7 +95,6 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
                     break;
             }
 
-            fileUrl = getProcessedFileUrl(processedFile.getName());
             System.out.println("Processed Url : " + fileUrl);
 
 
@@ -93,13 +103,20 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
             e.printStackTrace();
         }
 
+        if(score>=0 && score<=33){
+            poseScore = PoseScore.BAD;
+        }else if(score>33 && score<=66){
+            poseScore = PoseScore.GOOD;
+        }else{
+            poseScore = PoseScore.EXCELLENT;
+        }
 
         AnalyzeEntity newAnalyzeEntity = AnalyzeEntity.builder()
                 .user(user)
                 .game(targetGame)
-                .videoUrl(fileUrl)
-                .poseScore(PoseScore.GOOD)
-                .recommendPose("잘좀해봐")
+                .videoUrl(videoUrl)
+                .poseScore(poseScore)
+                .recommendPose(message1)
                 .build();
 
         newAnalyzeEntity = analyzeRepository.save(newAnalyzeEntity);
@@ -111,7 +128,7 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
         return "http://localhost:8080/processed-files/" + fileName;
     }
 
-    private File sendBowlingToFlask(File file) throws IOException {
+    private Map<String, Object> sendFileToFlask(File file) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
 
         // Flask 서버에 보낼 파일 설정
@@ -128,15 +145,11 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
         try {
             // Flask 서버의 /upload 엔드포인트로 파일 업로드 요청
             URI uri = URI.create(FLASK_SERVER_URL + "/upload");
-            ResponseEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.POST, entity, byte[].class);
+            ResponseEntity<Map> response = restTemplate.exchange(uri, HttpMethod.POST, entity, Map.class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
-                // Flask 서버에서 처리된 파일을 저장할 경로 지정
-                File processedFile = new File(UPLOAD_RESULT_DIR + file.getName());
-                // 응답으로 받은 바이트 배열을 처리된 파일로 저장
-                Files.write(processedFile.toPath(), response.getBody());
-                System.out.println("Flask 서버로 파일 전송 및 처리 성공");
-                return processedFile;
+                // Flask 서버에서 반환된 데이터를 받아옴
+                return response.getBody();  // Flask 서버에서 반환된 JSON 응답을 받아옴
             } else {
                 System.out.println("Flask 서버로 파일 전송 실패: " + response.getStatusCode());
                 throw new IOException("Flask 서버에서 처리된 파일을 받는 데 실패했습니다.");
