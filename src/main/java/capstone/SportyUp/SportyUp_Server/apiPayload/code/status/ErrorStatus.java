@@ -33,7 +33,10 @@ public enum ErrorStatus implements BaseErrorCode {
     REFRESH_TOKEN_NOT_FOUND(HttpStatus.FORBIDDEN, "TOKEN4001", "refresh token을 찾을 수 없습니다."),
 
     //스포츠 관련 에러
-    SPORTS_NOT_FOUND(HttpStatus.FORBIDDEN, "SPORTS4001", "스포츠 종목을 찾을 수 없습니다.");
+    SPORTS_NOT_FOUND(HttpStatus.FORBIDDEN, "SPORTS4001", "스포츠 종목을 찾을 수 없습니다."),
+
+    //게임 관련 에러
+    GAME_NOT_FOUND(HttpStatus.FORBIDDEN, "GAME4001", "해당 게임이 존재하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
