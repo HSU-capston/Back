@@ -37,6 +37,8 @@ public class AnalyzeConverter{
                 .id(analyze.getId())
                 .poseScore(String.valueOf(analyze.getPoseScore()))
                 .recommendPose(analyze.getRecommendPose())
+                .goodPoint(analyze.getGoodPoint())
+                .badPoint(analyze.getBadPoint())
                 .videoUrl(analyze.getVideoUrl())
                 .build();
     }

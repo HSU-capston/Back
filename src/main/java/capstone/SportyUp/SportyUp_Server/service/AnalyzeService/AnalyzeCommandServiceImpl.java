@@ -1,5 +1,8 @@
 package capstone.SportyUp.SportyUp_Server.service.AnalyzeService;
 
+import capstone.SportyUp.SportyUp_Server.apiPayload.Exception.GameHandler;
+import capstone.SportyUp.SportyUp_Server.apiPayload.Exception.UserHandler;
+import capstone.SportyUp.SportyUp_Server.apiPayload.code.status.ErrorStatus;
 import capstone.SportyUp.SportyUp_Server.converter.AnalyzeConverter;
 import capstone.SportyUp.SportyUp_Server.domain.AnalyzeEntity;
 import capstone.SportyUp.SportyUp_Server.domain.Game;
@@ -43,81 +46,35 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
     @Override
     public AnalyzeResponseDTO.AnalyzeResultDTO requestAnalyze(Long userId, Long gameId, AnalyzeRequestDTO.BowlingDTO request) {
 
-        User user = userRepository.findById(userId).orElse(null);
+        User user = userRepository.findById(userId).orElseThrow(()->new UserHandler(ErrorStatus.USER_NOT_FOUND));
         //분석할 영상이 속한 게임 찾기
-        Game targetGame = gameRepository.findById(gameId).orElse(null);
-        Sports targetSports = targetGame.getSports();
-
+        Game game = gameRepository.findById(gameId).orElseThrow(()->new GameHandler(ErrorStatus.GAME_NOT_FOUND));
+        Sports sports = game.getSports();
         //영상찾기
-        MultipartFile targetVideo = request.getFile();
-        String fileUrl = "";
-        String videoUrl = "";
-        String recommendPose = "";
-        String goodPoint = "";
-        String badPoint = "";
-        Double scoreDouble = (double) 0;
-        Integer score = 0;  // Double을 Integer로 변환
+        MultipartFile uploadedFile = request.getFile();
 
-        PoseScore poseScore = PoseScore.EXCELLENT;
-        if (targetVideo.isEmpty()) {
-            return null;
-        }
+        if (uploadedFile.isEmpty()) return null;
 
-        try {
-            // 저장할 경로 설정
-            File directory = new File(UPLOAD_DIR);
-            if (!directory.exists()) {
-                directory.mkdirs(); // 디렉터리 없으면 생성
-            }
+        //파일 저장
+        //Todo: 저장하지 않고 직접 파일을 보내도록
+        File savedFile = saveFile(uploadedFile);
 
-            // 저장할 파일 객체 생성
-            File destination = new File(UPLOAD_DIR + targetVideo.getOriginalFilename());
-            System.out.println("파일 이름: " + targetVideo.getOriginalFilename());
-            targetVideo.transferTo(destination);
+        //Flask 요청
+        Map<String, Object> flaskResponse = processFileWithFlask(sports, savedFile);
 
+        //Flask 응답
+        String videoUrl = (String) flaskResponse.get("video_url");
+        String recommendPose = (String) flaskResponse.get("recommend");
+        String goodPoint = (String) flaskResponse.get("good");
+        String badPoint = (String) flaskResponse.get("bad");
+        Double score = ((Number) flaskResponse.get("score")).doubleValue();
 
-            System.out.println(targetSports.getName());
-            // Flask 서버로 파일 전송 및 처리된 파일 받기
-            switch(targetSports.getName()){
-                case "볼링":
-                    System.out.println("볼링분석스");
+        PoseScore poseScore = evaluateScore(score.intValue());
 
-                    // Flask 서버로 파일 전송 및 처리된 파일 받기
-                    Map<String, Object> response = sendFileToFlask(destination);
-                    videoUrl = (String) response.get("video_url");
-                    recommendPose = (String) response.get("recommend");
-                    goodPoint = (String) response.get("good");
-                    badPoint = (String) response.get("bad");
-                    scoreDouble = (Double) response.get("score");
-                    score = scoreDouble.intValue();  // Double을 Integer로 변환
-                    break;
-                case "당구":
-                    break;
-                case "골프":
-                    break;
-                case "야구":
-                    break;
-            }
-
-            System.out.println("Processed Url : " + fileUrl);
-
-
-        } catch (IOException e) {
-            System.out.println("파일 저장 중 예외 발생: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        if(score>=0 && score<=33){
-            poseScore = PoseScore.BAD;
-        }else if(score>33 && score<=66){
-            poseScore = PoseScore.GOOD;
-        }else{
-            poseScore = PoseScore.EXCELLENT;
-        }
-
+        //AnalyzeEntity 저장
         AnalyzeEntity newAnalyzeEntity = AnalyzeEntity.builder()
                 .user(user)
-                .game(targetGame)
+                .game(game)
                 .videoUrl(videoUrl)
                 .poseScore(poseScore)
                 .goodPoint(goodPoint)
@@ -130,9 +87,6 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
         return AnalyzeConverter.toAnalyzeResultDTO(newAnalyzeEntity);
     }
 
-//    private String getProcessedFileUrl(String fileName) {
-//        return "http://localhost:8080/processed-files/" + fileName;
-//    }
 
     private Map<String, Object> sendFileToFlask(File file) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
@@ -164,5 +118,43 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
             e.printStackTrace();
             throw new IOException("Flask 서버로 파일을 전송하는데 실패했습니다.", e);
         }
+    }
+
+    private File saveFile(MultipartFile file) {
+        try {
+            File dir = new File(UPLOAD_DIR);
+            if (!dir.exists()) dir.mkdirs();
+
+            File destination = new File(UPLOAD_DIR + file.getOriginalFilename());
+            file.transferTo(destination);
+            return destination;
+        } catch (IOException e) {
+            throw new RuntimeException("파일 저장 실패: " + e.getMessage(), e);
+        }
+    }
+
+    private Map<String, Object> processFileWithFlask(Sports sports, File file) {
+        if ("볼링".equals(sports.getName())) {
+            try {
+                return sendFileToFlask(file);
+            } catch (IOException e) {
+                throw new RuntimeException("Flask 처리 실패", e);
+            }
+        }
+
+        // 다른 종목은 추후 구현
+        return Map.of(
+                "video_url", "",
+                "recommend", "",
+                "good", "",
+                "bad", "",
+                "score", 0.0
+        );
+    }
+
+    private PoseScore evaluateScore(int score) {
+        if (score <= 33) return PoseScore.BAD;
+        if (score <= 66) return PoseScore.GOOD;
+        return PoseScore.EXCELLENT;
     }
 }
