@@ -36,7 +36,10 @@ public enum ErrorStatus implements BaseErrorCode {
     SPORTS_NOT_FOUND(HttpStatus.FORBIDDEN, "SPORTS4001", "스포츠 종목을 찾을 수 없습니다."),
 
     //게임 관련 에러
-    GAME_NOT_FOUND(HttpStatus.FORBIDDEN, "GAME4001", "해당 게임이 존재하지 않습니다.");
+    GAME_NOT_FOUND(HttpStatus.FORBIDDEN, "GAME4001", "해당 게임이 존재하지 않습니다."),
+
+    //분석 관련 에러
+    ANALYZE_NOT_FOUND(HttpStatus.FORBIDDEN, "ANALYZE4001", "해당 분석이 존재하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
