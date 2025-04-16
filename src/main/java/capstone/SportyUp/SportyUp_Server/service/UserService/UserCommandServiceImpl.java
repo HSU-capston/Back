@@ -48,6 +48,7 @@ public class UserCommandServiceImpl implements UserCommandService {
                 .phoneNum(request.getPhoneNum())
                 .birthday(request.getBirthday())
                 .status(UserStatus.ACTIVE)
+                .isFirstLogin(true) //생성시에 true
                 .role(Role.USER)
                 .name(request.getNickname())
                 .build();
@@ -74,13 +75,21 @@ public class UserCommandServiceImpl implements UserCommandService {
             throw new UserHandler(ErrorStatus.USER_PASSWORD_IS_WRONG);
         }
 
+        //최초 로그인 검사
+        boolean showOnboarding = false;
+        if(user.isFirstLogin()){
+            showOnboarding = true;
+            user.setFirstLogin(false);
+            userRepository.save(user);
+        }
+
         //Token발급
         String accessToken = jwtService.createAccessToken(user.getId(), user.getRole());
         String refreshToken = jwtService.createRefreshToken(user.getId());
 
         jwtService.refreshTokenUpdate(user, refreshToken);
 
-        return UserConverter.toLoginResultDTO(accessToken,refreshToken);
+        return UserConverter.toLoginResultDTO(accessToken,refreshToken,showOnboarding);
     }
 
     @Override

@@ -35,6 +35,8 @@ public class User extends BaseEntity {
 
     private LocalDate birthday;
 
+    private boolean isFirstLogin;   //최초 로그인 검사 true면 최초 로그인, false면 다시 로그인
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserStatus status = UserStatus.ACTIVE;  //default = ACTIVE
