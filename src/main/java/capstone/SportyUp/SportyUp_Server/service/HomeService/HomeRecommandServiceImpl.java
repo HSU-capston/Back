@@ -39,7 +39,7 @@ public class HomeRecommandServiceImpl implements HomeRecommandService {
     @Override
     public HomeResponseDTO.RecommendedVideoListDTO getRecommendedVideos(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
-        UserSports userSports = userSportsRepository.findByUser(user).orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
+        UserSports userSports = userSportsRepository.findTop1ByUser(user).orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
         String sports = userSports.getSports().getName();
         UserSportsLevel level = userSports.getLevel();
         String levelStr = "초급자";
