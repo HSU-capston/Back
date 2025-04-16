@@ -10,10 +10,11 @@ public class UserConverter {
                 .build();
     }
 
-    public static UserResponseDTO.LoginResultDTO toLoginResultDTO(String accessToken, String refreshToken) {
+    public static UserResponseDTO.LoginResultDTO toLoginResultDTO(String accessToken, String refreshToken, boolean showOnboarding) {
         return UserResponseDTO.LoginResultDTO.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .showOnboarding(showOnboarding)
                 .build();
     }
 }

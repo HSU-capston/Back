@@ -43,6 +43,8 @@ public class UserResponseDTO {
         private String accessToken;
         @NotBlank
         private String refreshToken;
+        @NotBlank
+        private boolean showOnboarding;
     }
 
     @Builder
