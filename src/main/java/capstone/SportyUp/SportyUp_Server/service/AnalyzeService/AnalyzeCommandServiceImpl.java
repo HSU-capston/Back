@@ -3,6 +3,7 @@ package capstone.SportyUp.SportyUp_Server.service.AnalyzeService;
 import capstone.SportyUp.SportyUp_Server.apiPayload.Exception.GameHandler;
 import capstone.SportyUp.SportyUp_Server.apiPayload.Exception.UserHandler;
 import capstone.SportyUp.SportyUp_Server.apiPayload.code.status.ErrorStatus;
+import capstone.SportyUp.SportyUp_Server.aws.s3.S3Uploader;
 import capstone.SportyUp.SportyUp_Server.converter.AnalyzeConverter;
 import capstone.SportyUp.SportyUp_Server.domain.AnalyzeEntity;
 import capstone.SportyUp.SportyUp_Server.domain.Game;
@@ -16,7 +17,6 @@ import capstone.SportyUp.SportyUp_Server.web.DTO.AnalyzeDTO.AnalyzeRequestDTO;
 import capstone.SportyUp.SportyUp_Server.web.DTO.AnalyzeDTO.AnalyzeResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -24,9 +24,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @Service
@@ -36,12 +37,15 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
     private final GameRepository gameRepository;
     private final AnalyzeRepository analyzeRepository;
     private final UserRepository userRepository;
-    private final String FLASK_SERVER_URL = "http://localhost:5000";  // Flask 서버 URL (예시: http://localhost:5000)
-    @Value("${local-path.windows.upload}")
-    private String UPLOAD_DIR;
-    //    private static final String UPLOAD_DIR = "C:\\Users\\EliteBook\\Documents\\GitHub\\Back\\src\\main\\resources\\cam\\"; // 업로드된 파일 저장 폴더
-    @Value("${local-path.windows.result}")
-    private String UPLOAD_RESULT_DIR;
+
+    @Value("${flask}")
+    private String FLASK_SERVER_URL;  // Flask 서버 URL (예시: http://localhost:5000)
+    private final S3Uploader s3Uploader;
+//    @Value("${local-path.windows.upload}")
+//    private String UPLOAD_DIR;
+//    //    private static final String UPLOAD_DIR = "C:\\Users\\EliteBook\\Documents\\GitHub\\Back\\src\\main\\resources\\cam\\"; // 업로드된 파일 저장 폴더
+//    @Value("${local-path.windows.result}")
+//    private String UPLOAD_RESULT_DIR;
 
     @Override
     public AnalyzeResponseDTO.AnalyzeResultDTO requestAnalyze(Long userId, Long gameId, AnalyzeRequestDTO.BowlingDTO request) {
@@ -57,10 +61,21 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
 
         //파일 저장
         //Todo: 저장하지 않고 직접 파일을 보내도록
-        File savedFile = saveFile(uploadedFile);
+//        File savedFile = saveFile(uploadedFile);
+
+        //S3에 원본 영상 업로드
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
+        String rawKey = String.format("original-videos/user_%d/game_%d/original_%s.mp4", userId, gameId, timestamp);
+        String analyzedKey = String.format("analyzed-videos/user_%d/game_%d/analyzed_%s.mp4", userId, gameId, timestamp);
+        String uploadedVideoUrl;
+        try{
+            uploadedVideoUrl = s3Uploader.upload(uploadedFile, rawKey);
+        } catch (IOException e){
+            throw new RuntimeException("S3 업로드 실패", e);
+        }
 
         //Flask 요청
-        Map<String, Object> flaskResponse = processFileWithFlask(sports, savedFile);
+        Map<String, Object> flaskResponse = processFileWithFlask(sports,uploadedVideoUrl,analyzedKey);
 
         //Flask 응답
         String videoUrl = (String) flaskResponse.get("video_url");
@@ -88,12 +103,13 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
     }
 
 
-    private Map<String, Object> sendFileToFlask(File file) throws IOException {
+    private Map<String, Object> sendFileToFlask(String videoUrl, String analyzedKey) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
 
         // Flask 서버에 보낼 파일 설정
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("file", new FileSystemResource(file));
+        body.add("video_url", videoUrl);
+        body.add("analyzed_key", analyzedKey);
 
         // HTTP 요청 헤더 설정
         HttpHeaders headers = new HttpHeaders();
@@ -120,23 +136,23 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
         }
     }
 
-    private File saveFile(MultipartFile file) {
-        try {
-            File dir = new File(UPLOAD_DIR);
-            if (!dir.exists()) dir.mkdirs();
+//    private File saveFile(MultipartFile file) {
+//        try {
+//            File dir = new File(UPLOAD_DIR);
+//            if (!dir.exists()) dir.mkdirs();
+//
+//            File destination = new File(UPLOAD_DIR + file.getOriginalFilename());
+//            file.transferTo(destination);
+//            return destination;
+//        } catch (IOException e) {
+//            throw new RuntimeException("파일 저장 실패: " + e.getMessage(), e);
+//        }
+//    }
 
-            File destination = new File(UPLOAD_DIR + file.getOriginalFilename());
-            file.transferTo(destination);
-            return destination;
-        } catch (IOException e) {
-            throw new RuntimeException("파일 저장 실패: " + e.getMessage(), e);
-        }
-    }
-
-    private Map<String, Object> processFileWithFlask(Sports sports, File file) {
+    private Map<String, Object> processFileWithFlask(Sports sports, String videoUrl, String analyzedKey) {
         if ("볼링".equals(sports.getName())) {
             try {
-                return sendFileToFlask(file);
+                return sendFileToFlask(videoUrl, analyzedKey);
             } catch (IOException e) {
                 throw new RuntimeException("Flask 처리 실패", e);
             }
