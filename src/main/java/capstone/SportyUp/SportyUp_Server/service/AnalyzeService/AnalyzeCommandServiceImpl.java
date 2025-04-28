@@ -5,14 +5,12 @@ import capstone.SportyUp.SportyUp_Server.apiPayload.Exception.UserHandler;
 import capstone.SportyUp.SportyUp_Server.apiPayload.code.status.ErrorStatus;
 import capstone.SportyUp.SportyUp_Server.aws.s3.S3Uploader;
 import capstone.SportyUp.SportyUp_Server.converter.AnalyzeConverter;
-import capstone.SportyUp.SportyUp_Server.domain.AnalyzeEntity;
-import capstone.SportyUp.SportyUp_Server.domain.Game;
-import capstone.SportyUp.SportyUp_Server.domain.Sports;
-import capstone.SportyUp.SportyUp_Server.domain.User;
+import capstone.SportyUp.SportyUp_Server.domain.*;
 import capstone.SportyUp.SportyUp_Server.domain.enums.PoseScore;
 import capstone.SportyUp.SportyUp_Server.repository.AnalyzeRepository;
 import capstone.SportyUp.SportyUp_Server.repository.GameRepository;
 import capstone.SportyUp.SportyUp_Server.repository.UserRepository;
+import capstone.SportyUp.SportyUp_Server.repository.UserSportsRepository;
 import capstone.SportyUp.SportyUp_Server.web.DTO.AnalyzeDTO.AnalyzeRequestDTO;
 import capstone.SportyUp.SportyUp_Server.web.DTO.AnalyzeDTO.AnalyzeResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +35,7 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
     private final GameRepository gameRepository;
     private final AnalyzeRepository analyzeRepository;
     private final UserRepository userRepository;
+    private final UserSportsRepository userSportsRepository;
 
     @Value("${flask}")
     private String FLASK_SERVER_URL;  // Flask 서버 URL (예시: http://localhost:5000)
@@ -54,6 +53,7 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
         //분석할 영상이 속한 게임 찾기
         Game game = gameRepository.findById(gameId).orElseThrow(()->new GameHandler(ErrorStatus.GAME_NOT_FOUND));
         Sports sports = game.getSports();
+        UserSports userSports = userSportsRepository.findTop1ByUserAndSports(user,sports);
         //영상찾기
         MultipartFile uploadedFile = request.getFile();
 
@@ -73,24 +73,27 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
         } catch (IOException e){
             throw new RuntimeException("S3 업로드 실패", e);
         }
+        String userLevel = userSports.getLevel().toString();
 
         //Flask 요청
-        Map<String, Object> flaskResponse = processFileWithFlask(sports,uploadedVideoUrl,analyzedKey);
+        Map<String, Object> flaskResponse = processFileWithFlask(sports,uploadedVideoUrl,analyzedKey,userLevel);
 
         //Flask 응답
         String videoUrl = (String) flaskResponse.get("video_url");
         String recommendPose = (String) flaskResponse.get("recommend");
         String goodPoint = (String) flaskResponse.get("good");
         String badPoint = (String) flaskResponse.get("bad");
-        Double score = ((Number) flaskResponse.get("score")).doubleValue();
+        PoseScore poseScore = PoseScore.valueOf(flaskResponse.get("grade").toString());
+        Integer score = ((Number) flaskResponse.get("score")).intValue();
 
-        PoseScore poseScore = evaluateScore(score.intValue());
+//        PoseScore poseScore = evaluateScore(score.intValue());
 
         //AnalyzeEntity 저장
         AnalyzeEntity newAnalyzeEntity = AnalyzeEntity.builder()
                 .user(user)
                 .game(game)
                 .videoUrl(videoUrl)
+                .score(score)
                 .poseScore(poseScore)
                 .goodPoint(goodPoint)
                 .badPoint(badPoint)
@@ -103,12 +106,13 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
     }
 
 
-    private Map<String, Object> sendFileToFlask(String videoUrl, String analyzedKey) throws IOException {
+    private Map<String, Object> sendFileToFlask(String videoUrl, String analyzedKey, String userLevel) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
 
         // Flask 서버에 보낼 파일 설정
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("video_url", videoUrl);
+        body.add("user_level", userLevel);
         body.add("analyzed_key", analyzedKey);
 
         // HTTP 요청 헤더 설정
@@ -149,10 +153,10 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
 //        }
 //    }
 
-    private Map<String, Object> processFileWithFlask(Sports sports, String videoUrl, String analyzedKey) {
+    private Map<String, Object> processFileWithFlask(Sports sports, String videoUrl, String analyzedKey, String userLevel) {
         if ("볼링".equals(sports.getName())) {
             try {
-                return sendFileToFlask(videoUrl, analyzedKey);
+                return sendFileToFlask(videoUrl, analyzedKey, userLevel);
             } catch (IOException e) {
                 throw new RuntimeException("Flask 처리 실패", e);
             }
@@ -168,9 +172,9 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
         );
     }
 
-    private PoseScore evaluateScore(int score) {
-        if (score <= 33) return PoseScore.BAD;
-        if (score <= 66) return PoseScore.GOOD;
-        return PoseScore.EXCELLENT;
-    }
+//    private PoseScore evaluateScore(int score) {
+//        if (score <= 33) return PoseScore.BAD;
+//        if (score <= 66) return PoseScore.GOOD;
+//        return PoseScore.EXCELLENT;
+//    }
 }
