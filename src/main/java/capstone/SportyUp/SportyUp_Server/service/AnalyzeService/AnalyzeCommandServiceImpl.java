@@ -84,9 +84,13 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
         String goodPoint = (String) flaskResponse.get("good");
         String badPoint = (String) flaskResponse.get("bad");
         PoseScore poseScore = PoseScore.valueOf(flaskResponse.get("grade").toString());
-        Integer score = ((Number) flaskResponse.get("score")).intValue();
+        Integer score = (Integer)flaskResponse.get("score");
+        Integer shoulder_angle_diff = (Integer) flaskResponse.get("shoulder_angle_diff");
+        Integer movement_distance = (Integer) flaskResponse.get("movement_distance");
+        Integer wrist_movement_total = (Integer) flaskResponse.get("wrist_movement_total");
+        Integer ankle_switch_count = (Integer) flaskResponse.get("ankle_switch_count");
 
-//        PoseScore poseScore = evaluateScore(score.intValue());
+//          PoseScore poseScore = evaluateScore(score.intValue());
 
         //AnalyzeEntity 저장
         AnalyzeEntity newAnalyzeEntity = AnalyzeEntity.builder()
@@ -98,6 +102,10 @@ public class AnalyzeCommandServiceImpl implements AnalyzeCommandService {
                 .goodPoint(goodPoint)
                 .badPoint(badPoint)
                 .recommendPose(recommendPose)
+                .shoulderAngleDiff(shoulder_angle_diff)
+                .movementDistance(movement_distance)
+                .wristMovementTotal(wrist_movement_total)
+                .ankleSwitchCount(ankle_switch_count)
                 .build();
 
         newAnalyzeEntity = analyzeRepository.save(newAnalyzeEntity);
