@@ -58,6 +58,11 @@ public class AnalyzeResponseDTO {
         String goodPoint;
         String badPoint;
         String videoUrl;
+        Integer score;
+        Integer shoulderAngleDiff;  //어깨각도
+        Integer movementDistance;   //평균 몸통 움직임
+        Integer wristMovementTotal; //총 팔 움직임
+        Integer ankleSwitchCount;   //스탭 수
     }
 
 }

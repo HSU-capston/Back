@@ -37,6 +37,14 @@ public class AnalyzeEntity extends BaseEntity {
     @Column(nullable = false, length = 255)   //아쉬운점
     private String badPoint;
 
+    private Integer shoulderAngleDiff;  //어깨각도
+
+    private Integer movementDistance;   //평균 몸통 움직임
+
+    private Integer wristMovementTotal; //총 팔 움직임
+
+    private Integer ankleSwitchCount;   //스탭 수
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -46,5 +54,7 @@ public class AnalyzeEntity extends BaseEntity {
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
+
+
 
 }

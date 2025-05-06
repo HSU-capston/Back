@@ -40,6 +40,11 @@ public class AnalyzeConverter{
                 .goodPoint(analyze.getGoodPoint())
                 .badPoint(analyze.getBadPoint())
                 .videoUrl(analyze.getVideoUrl())
+                .score(analyze.getScore())
+                .ankleSwitchCount(analyze.getAnkleSwitchCount())
+                .movementDistance(analyze.getMovementDistance())
+                .shoulderAngleDiff(analyze.getShoulderAngleDiff())
+                .wristMovementTotal(analyze.getWristMovementTotal())
                 .build();
     }
 }
