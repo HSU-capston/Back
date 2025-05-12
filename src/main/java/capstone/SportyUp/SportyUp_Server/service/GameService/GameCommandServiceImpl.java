@@ -1,9 +1,13 @@
 package capstone.SportyUp.SportyUp_Server.service.GameService;
 
+import capstone.SportyUp.SportyUp_Server.apiPayload.Exception.AnalyzeHandler;
+import capstone.SportyUp.SportyUp_Server.apiPayload.code.status.ErrorStatus;
 import capstone.SportyUp.SportyUp_Server.converter.GameConverter;
+import capstone.SportyUp.SportyUp_Server.domain.AnalyzeEntity;
 import capstone.SportyUp.SportyUp_Server.domain.Game;
 import capstone.SportyUp.SportyUp_Server.domain.Sports;
 import capstone.SportyUp.SportyUp_Server.domain.User;
+import capstone.SportyUp.SportyUp_Server.repository.AnalyzeRepository;
 import capstone.SportyUp.SportyUp_Server.repository.GameRepository;
 import capstone.SportyUp.SportyUp_Server.repository.SportsRepository;
 import capstone.SportyUp.SportyUp_Server.repository.UserRepository;
@@ -21,6 +25,7 @@ public class GameCommandServiceImpl implements GameCommandService {
     private final GameRepository gameRepository;
     private final UserRepository userRepository;
     private final SportsRepository sportsRepository;
+    private final AnalyzeRepository analyzeRepository;
 
     @Override
     public GameResponseDTO.CreateResultDTO createGame(Long userId, GameRequestDTO.CreateDTO request) {
@@ -43,10 +48,12 @@ public class GameCommandServiceImpl implements GameCommandService {
     public GameResponseDTO.EndResultDTO endGame(Long gameId, GameRequestDTO.EndDTO request) {
 
         Game game = gameRepository.findById(gameId).orElse(null);
+        AnalyzeEntity topAnalyze = analyzeRepository.findTopByGameIdOrderByScoreDesc(gameId).orElseThrow(()-> new AnalyzeHandler(ErrorStatus.ANALYZE_NOT_FOUND));
+        System.out.println("top analyzeId: " + topAnalyze.getId());
 
         game.setScore(request.getScore());
         game.setSummary("적당히 잘했어..");
-        game.setHighlightUrl("highlight_url");
+        game.setHighlightUrl(topAnalyze.getVideoUrl());
 
         gameRepository.save(game);
 
