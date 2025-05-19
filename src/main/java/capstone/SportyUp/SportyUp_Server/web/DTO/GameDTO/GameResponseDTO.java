@@ -44,7 +44,7 @@ public class GameResponseDTO {
     @AllArgsConstructor
     public static class GameDetailDTO{
         Long id;
-        LocalDateTime playDate;
+//        LocalDateTime playDate;
         String summary; //게임 요약
         Integer score;
         String highlightUrl;    //하이라이트 url
