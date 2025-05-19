@@ -79,7 +79,7 @@ public class GameConverter {
                 .id(game.getId())
                 .summary(game.getSummary())
                 .score(game.getScore())
-                .playDate(game.getPlayDate())
+//                .playDate(game.getPlayDate())
                 .highlightUrl(game.getHighlightUrl())
                 .build();
     }
