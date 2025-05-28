@@ -91,15 +91,19 @@ public class HomeRecommandServiceImpl implements HomeRecommandService {
             //YouTube API 응답
             List<String> videoUrls = new ArrayList<>();
             List<String> thumbnailUrls = new ArrayList<>();
+            List<String> titles = new ArrayList<>();
+            List<String> channelTitles = new ArrayList<>();
 
             if(searchResultList != null && searchResultList.size() > 0 ){
                 for(SearchResult searchResult : searchResultList){
                     videoUrls.add(YOUTUBE_VIDEO_URL_BASE+searchResult.getId().getVideoId());
                     thumbnailUrls.add(searchResult.getSnippet().getThumbnails().getDefault().getUrl());
+                    titles.add(searchResult.getSnippet().getTitle());
+                    channelTitles.add(searchResult.getSnippet().getChannelTitle());
                 }
             }
 
-            return HomeConverter.toRecommendedVideoListDTO(videoUrls, thumbnailUrls);
+            return HomeConverter.toRecommendedVideoListDTO(videoUrls, thumbnailUrls, titles, channelTitles);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
