@@ -6,14 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeConverter {
-    public static HomeResponseDTO.RecommendedVideoListDTO toRecommendedVideoListDTO(List<String> videoUrls, List<String> thumbnailUrls){
+    public static HomeResponseDTO.RecommendedVideoListDTO toRecommendedVideoListDTO(List<String> videoUrls, List<String> thumbnailUrls, List<String> titles, List<String> channelTitles){
         List<HomeResponseDTO.RecommendedVideoDTO> recommendedVideoDTOList = new ArrayList<>();
 
         int size = Math.min(videoUrls.size(), thumbnailUrls.size());
         for (int i = 0; i < size; i++) {
             String videoUrl = videoUrls.get(i);
             String thumbnailUrl = thumbnailUrls.get(i);
-            recommendedVideoDTOList.add(toRecommendedVideoDTO(videoUrl, thumbnailUrl));
+            String title = titles.get(i);
+            String channelTitle = channelTitles.get(i);
+            recommendedVideoDTOList.add(toRecommendedVideoDTO(videoUrl, thumbnailUrl, title, channelTitle));
         }
 
         return HomeResponseDTO.RecommendedVideoListDTO.builder()
@@ -22,10 +24,12 @@ public class HomeConverter {
                 .build();
     }
 
-    public static HomeResponseDTO.RecommendedVideoDTO toRecommendedVideoDTO(String videoUrl, String thumbnailUrl){
+    public static HomeResponseDTO.RecommendedVideoDTO toRecommendedVideoDTO(String videoUrl, String thumbnailUrl, String title, String channelTitle){
         return HomeResponseDTO.RecommendedVideoDTO.builder()
                 .videoUrl(videoUrl)
                 .thumbnailUrl(thumbnailUrl)
+                .title(title)
+                .channelTitle(channelTitle)
                 .build();
     }
 }

@@ -16,6 +16,8 @@ public class HomeResponseDTO {
     public static class RecommendedVideoDTO {
         String videoUrl;
         String thumbnailUrl;
+        String title;
+        String channelTitle;
     }
 
     @Builder
