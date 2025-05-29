@@ -52,7 +52,6 @@ dependencies {
 	implementation 'software.amazon.awssdk:auth:2.20.58'
 
 
-
 	// Youtube API
 	implementation 'com.google.api-client:google-api-client:1.33.0'
 	implementation 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
