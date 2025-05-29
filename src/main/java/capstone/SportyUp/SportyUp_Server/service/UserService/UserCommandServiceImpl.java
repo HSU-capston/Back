@@ -106,4 +106,19 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         userSportsRepository.save(userSports);
     }
+
+    @Override
+    public UserResponseDTO.UserInfoDTO updateUserInfo(Long userId, UserRequestDTO.UpdateUserInfoDTO request) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
+
+        if(request.getName() != null &&
+                request.getEmail() != null &&
+                request.getPhoneNum() != null){
+            user.setName(request.getName());
+            user.setEmail(request.getEmail());
+            user.setPhoneNum(request.getPhoneNum());
+        }
+
+        return UserConverter.toUserInfoDTO(user);
+    }
 }

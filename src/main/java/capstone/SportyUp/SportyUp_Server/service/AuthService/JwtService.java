@@ -26,7 +26,7 @@ public class JwtService {
 
     @Value("${spring.jwt.secretKey}")
     private String secretKey;
-    private final long accessTokenExpirationMs = 1000 * 60 * 60; //AccessToken만료시간 1시간
+    private final long accessTokenExpirationMs = 1000 * 60 * 60 * 10; //AccessToken만료시간 10시간
     private final long refreshTokenExpirationMs = 1000L * 60 * 60 * 24 * 7; //7일
     private final RefreshTokenRepository refreshTokenRepository;
 

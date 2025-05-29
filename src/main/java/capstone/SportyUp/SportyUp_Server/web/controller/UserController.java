@@ -2,6 +2,7 @@ package capstone.SportyUp.SportyUp_Server.web.controller;
 
 import capstone.SportyUp.SportyUp_Server.apiPayload.ApiResponse;
 import capstone.SportyUp.SportyUp_Server.service.UserService.UserCommandService;
+import capstone.SportyUp.SportyUp_Server.service.UserService.UserQueryService;
 import capstone.SportyUp.SportyUp_Server.web.DTO.UserDTO.UserRequestDTO;
 import capstone.SportyUp.SportyUp_Server.web.DTO.UserDTO.UserResponseDTO;
 import capstone.SportyUp.SportyUp_Server.web.controller.specification.UserSpecification;
@@ -16,14 +17,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserController implements UserSpecification {
     private final UserCommandService userCommandService;
+    private final UserQueryService userQueryService;
+
     @Override
     public ApiResponse<UserResponseDTO.UserInfoDTO> getUserInfo() {
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = (Long) authentication.getPrincipal();
+
+        return ApiResponse.onSuccess(userQueryService.getUser(userId));
     }
 
     @Override
     public ApiResponse<UserResponseDTO.UserInfoDTO> updateUserInfo(UserRequestDTO.UpdateUserInfoDTO request) {
-        return null;
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = (Long) authentication.getPrincipal();
+
+        return ApiResponse.onSuccess(userCommandService.updateUserInfo(userId, request));
     }
 
     @Override
